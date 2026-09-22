@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { services, portfolio, testimonials } from "@/lib/mock-data";
 import { ArrowRight, Play, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { HeroSlideshow } from "@/components/ui/hero-slideshow";
 
 export default function Home() {
   const featuredServices = services.filter(s => s.is_featured);
@@ -11,88 +12,69 @@ export default function Home() {
 
   return (
     <>
-      {/* HERO SECTION — Split layout with type stack + photo grid */}
-      <section className="relative bg-deep-navy text-white overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-[92vh]">
+      {/* HERO SECTION — Full bleed slideshow */}
+      <section className="relative bg-deep-navy text-white overflow-hidden min-h-[60vh] flex items-center pt-20">
+        {/* Absolute Background Slideshow */}
+        <HeroSlideshow />
+        
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="max-w-4xl py-12 md:py-16">
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-stage-gold mb-6">
+              Accra &middot; Ghana
+            </p>
 
-            {/* LEFT — Typography */}
-            <div className="flex flex-col justify-center py-20 md:py-28 lg:pr-12">
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-stage-gold mb-8">
-                Accra &middot; Ghana
-              </p>
+            <h1 className="font-heading font-bold tracking-tighter leading-[1.05] mb-6">
+              <span className="block text-4xl md:text-5xl lg:text-6xl text-white">LED SCREENS & <span className="text-primary">LIVE STREAMS</span></span>
+              <span className="block text-4xl md:text-5xl lg:text-6xl text-white/40 mt-1">4K RECORDING & FULL COVERAGE</span>
+            </h1>
 
-              <h1 className="font-heading font-bold tracking-tighter leading-[0.95] mb-8">
-                <span className="block text-5xl md:text-6xl lg:text-7xl text-white/40">LED SCREENS</span>
-                <span className="block text-5xl md:text-6xl lg:text-7xl text-primary mt-1">LIVE STREAMS</span>
-                <span className="block text-5xl md:text-6xl lg:text-7xl text-white mt-1">4K RECORDING</span>
-                <span className="block text-5xl md:text-6xl lg:text-7xl text-white/40 mt-1">FULL COVERAGE</span>
-              </h1>
+            <p className="text-base md:text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
+              Modular LED walls, multi-camera broadcast rigs, and on-site audio engineering for concerts, weddings, and corporate events.
+            </p>
 
-              <p className="text-base md:text-lg text-gray-400 max-w-md mb-10 leading-relaxed">
-                Modular LED walls, multi-camera broadcast rigs, and on-site audio engineering for concerts, weddings, and corporate events.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 mb-14">
-                <Link href="/book" className={cn(buttonVariants({ size: "lg" }), "h-13 px-8 text-base font-bold uppercase tracking-wide")}>
-                  Book a Service <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-                <Link href="/quote" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-13 px-8 text-base font-bold uppercase tracking-wide bg-white/5 border-white/15 hover:bg-white/10 hover:text-white")}>
-                  Get a Quote
-                </Link>
-              </div>
-
-              {/* Stats bar */}
-              <div className="flex gap-10 border-t border-white/10 pt-8">
-                <div>
-                  <p className="font-heading font-bold text-3xl text-white">150<span className="text-primary">+</span></p>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 mt-1">Events Produced</p>
-                </div>
-                <div>
-                  <p className="font-heading font-bold text-3xl text-white">4K</p>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 mt-1">Multi-Cam Rigs</p>
-                </div>
-                <div>
-                  <p className="font-heading font-bold text-3xl text-white">12<span className="text-stage-gold">m</span></p>
-                  <p className="text-xs uppercase tracking-wider text-gray-500 mt-1">Max LED Width</p>
-                </div>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 mb-10">
+              <Link href="/book" className={cn(buttonVariants({ size: "lg" }), "h-12 px-8 text-base font-bold uppercase tracking-wide")}>
+                Book a Service <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <Link href="/quote" className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-12 px-8 text-base font-bold uppercase tracking-wide bg-transparent border-white/20 hover:bg-white/10 hover:text-white hover:border-white/40")}>
+                Get a Quote
+              </Link>
             </div>
 
-            {/* RIGHT — Asymmetric photo grid */}
-            <div className="hidden lg:grid grid-cols-2 grid-rows-3 gap-3 py-12">
-              <div className="row-span-2 bg-studio-navy rounded-sm overflow-hidden border border-white/5">
-                <img src="/placeholder.webp" alt="LED screen setup at a gospel concert" className="object-cover w-full h-full" />
+            {/* Stats bar */}
+            <div className="flex gap-8 border-t border-white/10 pt-6">
+              <div>
+                <p className="font-heading font-bold text-2xl text-white">150<span className="text-primary">+</span></p>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Events</p>
               </div>
-              <div className="bg-studio-navy rounded-sm overflow-hidden border border-white/5">
-                <img src="/placeholder.webp" alt="Multi-camera live switching desk" className="object-cover w-full h-full" />
+              <div>
+                <p className="font-heading font-bold text-2xl text-white">4K</p>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">Multi-Cam</p>
               </div>
-              <div className="bg-studio-navy rounded-sm overflow-hidden border border-white/5">
-                <img src="/placeholder.webp" alt="Wedding cinematic coverage" className="object-cover w-full h-full" />
-              </div>
-              <div className="col-span-2 bg-studio-navy rounded-sm overflow-hidden border border-white/5">
-                <img src="/placeholder.webp" alt="Full outdoor event production" className="object-cover w-full h-full" />
+              <div>
+                <p className="font-heading font-bold text-2xl text-white">12<span className="text-stage-gold">m</span></p>
+                <p className="text-[10px] uppercase tracking-wider text-gray-400 mt-1">LED Width</p>
               </div>
             </div>
-
           </div>
         </div>
 
-        {/* Scrolling service marquee */}
-        <div className="border-t border-white/5 bg-charcoal/60 overflow-hidden">
-          <div className="flex animate-[marquee_20s_linear_infinite] whitespace-nowrap py-3">
-            {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex shrink-0 items-center gap-8 px-8">
-                {["LED SCREEN RENTAL", "LIVE STREAMING", "4K RECORDING", "WEDDING COVERAGE", "FUNERAL COVERAGE", "CORPORATE EVENTS", "GOSPEL CONCERTS"].map((label) => (
-                  <span key={label} className="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 flex items-center gap-8">
-                    {label} <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
-                  </span>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
+
+      {/* Scrolling service marquee */}
+      <div className="border-t border-b border-white/5 bg-deep-navy overflow-hidden">
+        <div className="flex animate-[marquee_20s_linear_infinite] whitespace-nowrap py-4">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="flex shrink-0 items-center gap-8 px-8">
+              {["LED SCREEN RENTAL", "LIVE STREAMING", "4K RECORDING", "WEDDING COVERAGE", "FUNERAL COVERAGE", "CORPORATE EVENTS", "GOSPEL CONCERTS"].map((label) => (
+                <span key={label} className="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 flex items-center gap-8">
+                  {label} <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* SERVICES SHOWCASE */}
       <section className="py-24 bg-background">
@@ -165,7 +147,7 @@ export default function Home() {
             </div>
             
             <div className="relative aspect-video bg-studio-navy rounded-lg overflow-hidden border border-white/10 group shadow-2xl">
-              <img src="/placeholder.webp" alt="Behind the scenes" className="object-cover w-full h-full opacity-70 group-hover:opacity-90 transition-opacity" />
+              <img src="/images/live_stream.jpg" alt="Behind the scenes" className="object-cover w-full h-full opacity-70 group-hover:opacity-90 transition-opacity" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-20 h-20 rounded-full bg-primary/90 flex items-center justify-center cursor-pointer hover:bg-primary transition-colors hover:scale-110 duration-300">
                   <Play className="h-8 w-8 text-white ml-1" />

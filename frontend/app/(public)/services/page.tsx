@@ -34,7 +34,7 @@ export default function ServicesIndexPage() {
                 {/* Image Side */}
                 <div className="w-full lg:w-1/2">
                   <div className="aspect-[4/3] bg-muted relative rounded-sm overflow-hidden border border-border shadow-md group">
-                    <img src="/placeholder.webp" alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
+                    <img src={service.cover_media || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 </div>
                 

@@ -60,8 +60,8 @@ export default function AboutPage() {
             </div>
 
             <div className="relative">
-              <div className="aspect-[4/5] bg-muted rounded-sm overflow-hidden shadow-xl border border-border">
-                <img src="/placeholder.webp" alt="The Ravenous Team" className="object-cover w-full h-full" />
+              <div className="aspect-[4/5] bg-muted rounded-sm overflow-hidden shadow-xl border border-border relative">
+                <img src="/images/live_stream.jpg" alt="The Ravenous Team" className="object-cover w-full h-full" />
               </div>
               <div className="absolute -bottom-6 -left-6 bg-primary text-white p-6 shadow-lg hidden md:block">
                 <h4 className="font-heading font-bold text-2xl uppercase">Flawless<br/>Execution</h4>

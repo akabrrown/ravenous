@@ -8,6 +8,7 @@ export const services = [
     equipment_used: ["P3.91mm Outdoor LED Panels", "Novastar Video Processors", "Trussing Support Systems"],
     starting_price: 3500,
     is_featured: true,
+    cover_media: "/images/led_screen.jpg"
   },
   {
     id: "s2",
@@ -18,29 +19,10 @@ export const services = [
     equipment_used: ["Blackmagic ATEM Switchers", "Sony PXW-Z190 Cameras", "LiveU Solo Video Encoders", "Wireless Intercoms"],
     starting_price: 2500,
     is_featured: true,
+    cover_media: "/images/live_stream.jpg"
   },
   {
     id: "s3",
-    name: "Live Recording",
-    slug: "live-recording",
-    short_description: "Multi-track audio and 4K video recording for post-production.",
-    description: "Capture every moment in stunning 4K and pristine multi-track audio. Perfect for gospel concerts, theater performances, and corporate keynotes that require high-end post-production.",
-    equipment_used: ["Canon C300 Mk III", "Zoom F8n Pro Recorders", "Sennheiser Wireless Mics"],
-    starting_price: 2000,
-    is_featured: false,
-  },
-  {
-    id: "s4",
-    name: "Wedding Coverage",
-    slug: "wedding-coverage",
-    short_description: "Cinematic wedding videography and photography.",
-    description: "Beautiful, cinematic capture of your special day. We provide comprehensive coverage from preparation to the reception, delivering high-end photos and a highlight film you'll cherish forever.",
-    equipment_used: ["Sony A7S III", "DJI Ronin Gimbals", "DJI Mavic 3 Drones"],
-    starting_price: 4500,
-    is_featured: true,
-  },
-  {
-    id: "s5",
     name: "Funeral Coverage",
     slug: "funeral-coverage",
     short_description: "Respectful and comprehensive funeral media coverage.",
@@ -48,6 +30,51 @@ export const services = [
     equipment_used: ["Sony PXW-Z190 Cameras", "Portable PA Systems"],
     starting_price: 3000,
     is_featured: false,
+    cover_media: "/images/funeral_coverage.jpg"
+  },
+  {
+    id: "s4",
+    name: "Outdoor Events",
+    slug: "outdoor-events",
+    short_description: "Complete media and production solutions for outdoor events.",
+    description: "From elegant outdoor dinners to massive festivals, we provide comprehensive staging, lighting, and coverage for any open-air occasion.",
+    equipment_used: ["Weatherproof Cameras", "Outdoor PA Systems", "Generators"],
+    starting_price: 4000,
+    is_featured: true,
+    cover_media: "/images/outdoor.jpg"
+  },
+  {
+    id: "s5",
+    name: "Wedding Coverage",
+    slug: "wedding-coverage",
+    short_description: "Cinematic wedding videography and photography.",
+    description: "Beautiful, cinematic capture of your special day. We provide comprehensive coverage from preparation to the reception, delivering high-end photos and a highlight film you'll cherish forever.",
+    equipment_used: ["Sony A7S III", "DJI Ronin Gimbals", "DJI Mavic 3 Drones"],
+    starting_price: 4500,
+    is_featured: true,
+    cover_media: "/images/wedding.jpg"
+  },
+  {
+    id: "s6",
+    name: "Gospel Events",
+    slug: "gospel-events",
+    short_description: "Dynamic production for gospel concerts and church services.",
+    description: "We specialize in capturing the energy and spirit of gospel events with multi-camera setups, crisp audio recording, and dynamic stage lighting.",
+    equipment_used: ["PTZ Cameras", "DMX Lighting Controllers", "Digital Audio Snakes"],
+    starting_price: 3500,
+    is_featured: false,
+    cover_media: "/images/gospel_coverage.jpg"
+  },
+  {
+    id: "s7",
+    name: "Live Recording",
+    slug: "live-recording",
+    short_description: "Multi-track audio and 4K video recording for post-production.",
+    description: "Capture every moment in stunning 4K and pristine multi-track audio. Perfect for theater performances and corporate keynotes that require high-end post-production.",
+    equipment_used: ["Canon C300 Mk III", "Zoom F8n Pro Recorders", "Sennheiser Wireless Mics"],
+    starting_price: 2000,
+    is_featured: false,
+    cover_media: "/images/live_recording.jpg"
   },
 ];
 
@@ -124,4 +151,50 @@ export const faqs = [
     answer: "We require a 50% non-refundable deposit to secure your date and equipment. The remaining balance is due on or before the event date.",
     group: "Payments",
   },
+];
+
+export const blog_posts = [
+  {
+    id: "b1",
+    title: "Top 5 Benefits of LED Screens at Corporate Events",
+    slug: "benefits-of-led-screens-corporate-events",
+    excerpt: "Discover why upgrading from standard projectors to high-resolution LED screens can completely transform your next corporate gathering.",
+    content: `
+When planning a corporate event, one of the most critical decisions you'll make is how to present your visual content. For years, projection has been the standard. However, LED screens are rapidly taking over the industry, and for good reason.
+
+### 1. Unmatched Brightness and Clarity
+Unlike projectors, which can struggle in well-lit rooms, LED screens emit their own light. This means you don't have to plunge your audience into darkness just so they can read your presentation slides. 
+
+### 2. Scalability and Custom Shapes
+LED panels are modular. You aren't restricted to standard 16:9 aspect ratios. Want a massive ultra-wide screen? Or perhaps separate pillars of video flanking the stage? LED makes it possible.
+
+### 3. Reliability
+There are no bulbs to burn out mid-presentation. LED technology is incredibly robust and built for the rigors of live events.
+
+If you're looking to elevate your next corporate event in Ghana, contact Ravenous Studio Production to discuss our P3.91mm Outdoor/Indoor LED panel rentals.
+    `,
+    author: "Ravenous Studio Team",
+    published_at: "2026-09-10T10:00:00Z",
+    cover_media: "/placeholder.webp",
+  },
+  {
+    id: "b2",
+    title: "Why Multi-Camera Live Streaming is Essential in 2026",
+    slug: "why-multi-camera-live-streaming-is-essential",
+    excerpt: "A single camera at the back of the room isn't enough anymore. Learn how multi-camera setups keep remote audiences engaged.",
+    content: `
+The expectation for live streams has skyrocketed. Audiences are no longer satisfied with a single, static wide shot of a stage. To keep viewers engaged, you need dynamic, television-quality production.
+
+### The Power of Multiple Angles
+A multi-camera setup allows a technical director to cut between wide shots that establish the room, tight shots that capture the speaker's emotion, and audience reaction shots that make the remote viewer feel like they are in the room.
+
+### Redundancy and Professionalism
+If one camera goes down, the broadcast doesn't stop. A multi-camera setup provides essential redundancy. Combined with professional lower-third graphics and pristine audio integration, your stream elevates your brand's perception globally.
+
+At Ravenous Studio, we use Blackmagic ATEM Switchers and broadcast-grade cameras to deliver seamless, engaging live streams.
+    `,
+    author: "Ravenous Studio Team",
+    published_at: "2026-08-25T14:30:00Z",
+    cover_media: "/placeholder.webp",
+  }
 ];
