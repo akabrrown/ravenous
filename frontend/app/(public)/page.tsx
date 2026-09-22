@@ -96,7 +96,7 @@ export default function Home() {
               <Card key={service.id} className="group hover:shadow-xl transition-all duration-300 border-border/50 hover:border-primary/50 overflow-hidden bg-white">
                 <div className="h-48 bg-muted relative overflow-hidden">
                   <div className="absolute inset-0 bg-secondary/10 group-hover:bg-transparent transition-colors z-10"></div>
-                  <img src="/placeholder.webp" alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
+                  <img src={service.cover_media || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardHeader>
                   <CardTitle className="font-heading text-xl text-secondary uppercase">{service.name}</CardTitle>
@@ -170,7 +170,7 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {featuredPortfolio.map((project) => (
-              <div key={project.id} className="group relative aspect-[4/3] rounded-sm overflow-hidden bg-muted cursor-pointer border border-border">
+              <Link key={project.id} href={`/portfolio/${project.id}`} className="group relative aspect-[4/3] rounded-sm overflow-hidden bg-muted cursor-pointer border border-border block">
                 <img src={project.cover_media} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-navy/90 via-deep-navy/20 to-transparent"></div>
                 
@@ -182,11 +182,11 @@ export default function Home() {
                   <p className="text-gray-300 line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                     {project.description}
                   </p>
-                  <Button variant="link" className="text-stage-gold p-0 h-auto font-medium hover:text-white">
+                  <span className="inline-flex items-center text-stage-gold p-0 h-auto font-medium group-hover:text-white transition-colors">
                     View Project <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
           

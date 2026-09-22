@@ -34,19 +34,20 @@ export default function PortfolioIndexPage() {
           {/* Filters (UI only for mock) */}
           <div className="flex flex-wrap gap-2 mb-12">
             {categories.map((cat, i) => (
-              <button 
+              <Link 
                 key={i}
+                href="#"
                 className={`px-4 py-2 rounded-sm text-sm font-bold uppercase transition-colors ${i === 0 ? 'bg-secondary text-white' : 'bg-muted text-muted-foreground hover:bg-secondary/10'}`}
               >
                 {cat}
-              </button>
+              </Link>
             ))}
           </div>
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {portfolio.map((project) => (
-              <div key={project.id} className="group relative aspect-square rounded-sm overflow-hidden bg-muted cursor-pointer border border-border">
+              <Link key={project.id} href={`/portfolio/${project.id}`} className="group relative aspect-square rounded-sm overflow-hidden bg-muted cursor-pointer border border-border block">
                 <img src={project.cover_media} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-navy/90 via-deep-navy/30 to-transparent"></div>
                 
@@ -58,11 +59,11 @@ export default function PortfolioIndexPage() {
                   <p className="text-gray-300 text-sm line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                     {project.description}
                   </p>
-                  <Link href={`/portfolio/${project.id}`} className={cn(buttonVariants({ variant: "link" }), "text-stage-gold p-0 h-auto font-medium hover:text-white")}>
+                  <span className="inline-flex items-center text-stage-gold p-0 h-auto font-medium group-hover:text-white transition-colors">
                     View Full Details <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
+                  </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 

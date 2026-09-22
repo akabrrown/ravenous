@@ -105,7 +105,7 @@ export default function ContactPage() {
                     <Label htmlFor="message">Message</Label>
                     <Textarea id="message" placeholder="How can we help you?" className="min-h-[120px] bg-off-white" />
                   </div>
-                  <Button type="button" size="lg" className="w-full uppercase font-bold tracking-wide">
+                  <Button type="submit" size="lg" className="w-full uppercase font-bold tracking-wide">
                     Send Message
                   </Button>
                 </form>
