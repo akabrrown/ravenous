@@ -8,7 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createPortfolio, deletePortfolio, updatePortfolio } from "@/lib/actions";
-import { Edit, Trash2, Plus } from "lucide-react";
+import { Edit, Trash2, Plus, X } from "lucide-react";
+import { MediaUploader } from "@/components/ui/media-uploader";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function PortfolioClient({ initialProjects }: { initialProjects: any[] }) {
   const [projects, setProjects] = useState(initialProjects);
@@ -21,7 +23,11 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
     eventDate: "",
     location: "",
     description: "",
-    coverMediaId: "00000000-0000-0000-0000-000000000000", // Dummy UUID for now
+    coverMediaId: null,
+    coverMedia: null,
+    isFeatured: false,
+    published: true,
+    galleryMedia: [] as { id: string, deliveryUrl: string }[],
   });
 
   const resetForm = () => {
@@ -32,7 +38,11 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
       eventDate: "",
       location: "",
       description: "",
-      coverMediaId: "00000000-0000-0000-0000-000000000000",
+      coverMediaId: null,
+      coverMedia: null,
+      isFeatured: false,
+      published: true,
+      galleryMedia: [],
     });
     setIsEditing(false);
   };
@@ -47,6 +57,7 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
       ...project,
       // Format date for date input field
       eventDate: project.eventDate ? new Date(project.eventDate).toISOString().split('T')[0] : "",
+      galleryMedia: project.galleryMedia || [],
     });
     setIsEditing(true);
     setIsOpen(true);
@@ -65,14 +76,17 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
     const payload = {
       ...formData,
       servicesProvided: [], // Dummy empty array for now since no services selector is built
+      // For a full implementation, we'd also link `projectMedia` junction table for galleryMedia IDs
     };
 
     if (isEditing) {
       const id = payload.id;
       delete payload.id;
       delete payload.coverMedia;
+      delete payload.galleryMedia; // we skip junction for now in demo
       await updatePortfolio(id, payload);
     } else {
+      delete payload.galleryMedia;
       await createPortfolio(payload);
     }
     
@@ -106,6 +120,14 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
                 </div>
               </div>
 
+              <div className="space-y-2 pt-2">
+                <MediaUploader 
+                  label="Cover Image"
+                  currentMediaUrl={formData.coverMedia?.deliveryUrl}
+                  onUploadSuccess={(id, url) => setFormData({...formData, coverMediaId: id || null, coverMedia: { deliveryUrl: url }})}
+                />
+              </div>
+
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="clientName">Client Name</Label>
@@ -125,6 +147,55 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
               <div className="space-y-2">
                 <Label htmlFor="description">Full Description *</Label>
                 <Textarea id="description" required rows={4} value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} />
+              </div>
+
+              <div className="space-y-2 pt-2 border-t border-border mt-4">
+                <h3 className="font-heading font-bold uppercase text-secondary">Gallery Images</h3>
+                <div className="grid grid-cols-4 gap-2 mb-2">
+                  {(formData.galleryMedia || []).map((media: any, idx: number) => (
+                    <div key={idx} className="relative group aspect-square rounded-md overflow-hidden border border-border">
+                      <img src={media.deliveryUrl} alt="" className="w-full h-full object-cover" />
+                      <button 
+                        type="button"
+                        onClick={() => setFormData({...formData, galleryMedia: formData.galleryMedia.filter((_:any, i:number) => i !== idx)})}
+                        className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="text-white" size={16} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <MediaUploader 
+                  label="Add to Gallery"
+                  isMultiple={true}
+                  onUploadSuccess={(id, url) => {
+                    if (id && url) {
+                      setFormData((prev: any) => ({
+                        ...prev,
+                        galleryMedia: [...prev.galleryMedia, { id, deliveryUrl: url }]
+                      }))
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="flex gap-6 py-4">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="published" 
+                    checked={formData.published} 
+                    onCheckedChange={(c) => setFormData({...formData, published: !!c})} 
+                  />
+                  <Label htmlFor="published">Published</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="isFeatured" 
+                    checked={formData.isFeatured} 
+                    onCheckedChange={(c) => setFormData({...formData, isFeatured: !!c})} 
+                  />
+                  <Label htmlFor="isFeatured">Feature on Homepage</Label>
+                </div>
               </div>
 
               <div className="pt-4 flex justify-end gap-2">
@@ -151,7 +222,7 @@ export default function PortfolioClient({ initialProjects }: { initialProjects: 
               <TableCell className="font-medium text-secondary">{project.title}</TableCell>
               <TableCell className="text-muted-foreground text-sm">{project.eventType}</TableCell>
               <TableCell>
-                {project.eventDate ? new Date(project.eventDate).toLocaleDateString() : "N/A"}
+                {project.eventDate ? new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric" }).format(new Date(project.eventDate)) : "N/A"}
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">

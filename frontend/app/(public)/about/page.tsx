@@ -1,12 +1,19 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Video, Camera, MonitorPlay } from "lucide-react";
+import { db } from "@/lib/db";
+import { siteContent } from "@/lib/schema";
 
 export const metadata = {
   title: "About Us | Ravenous Studio Production",
   description: "Learn about our story, mission, and the professional equipment we use for live event production.",
 };
 
-export default function AboutPage() {
+export const revalidate = 60; // revalidate every minute
+
+export default async function AboutPage() {
+  const siteContentList = await db.query.siteContent.findMany();
+  const contentMap = siteContentList.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, any>);
+  
   return (
     <>
       {/* PAGE HEADER */}
@@ -29,14 +36,8 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <div>
               <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-6">Our Story</h2>
-              <div className="prose prose-lg text-muted-foreground">
-                <p>
-                  [Client to provide: Studio story / how Ravenous started (a paragraph or two)] 
-                </p>
-                <p>
-                  We started with a simple goal: to elevate the standard of event production in Ghana. 
-                  Today, we power some of the most significant weddings, funerals, and gospel concerts in Accra.
-                </p>
+              <div className="prose prose-lg text-muted-foreground whitespace-pre-wrap">
+                {contentMap["about_story"] || "We started with a simple goal: to elevate the standard of event production in Ghana. Today, we power some of the most significant weddings, funerals, and gospel concerts in Accra."}
               </div>
 
               <div className="mt-12 space-y-8">
@@ -44,16 +45,16 @@ export default function AboutPage() {
                   <h3 className="font-heading font-bold text-2xl uppercase text-secondary mb-3 flex items-center gap-2">
                     <MonitorPlay className="h-6 w-6 text-primary" /> Our Mission
                   </h3>
-                  <p className="text-muted-foreground">
-                    [Client to provide: Mission statement] To deliver seamless, high-quality production services that amplify the impact of every event, ensuring audiences both in-person and online experience the moment fully.
+                  <p className="text-muted-foreground whitespace-pre-wrap">
+                    {contentMap["about_mission"] || "To deliver seamless, high-quality production services that amplify the impact of every event, ensuring audiences both in-person and online experience the moment fully."}
                   </p>
                 </div>
                 <div>
                   <h3 className="font-heading font-bold text-2xl uppercase text-secondary mb-3 flex items-center gap-2">
                     <Video className="h-6 w-6 text-primary" /> Our Vision
                   </h3>
-                  <p className="text-muted-foreground">
-                    [Client to provide: Vision statement] To be the most trusted live production partner in West Africa, recognized for our technical excellence and reliability.
+                  <p className="text-muted-foreground whitespace-pre-wrap">
+                    {contentMap["about_vision"] || "To be the most trusted live production partner in West Africa, recognized for our technical excellence and reliability."}
                   </p>
                 </div>
               </div>

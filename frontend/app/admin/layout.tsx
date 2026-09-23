@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { LayoutDashboard, Users, Image as ImageIcon, FileText, Calendar, Settings, MessageSquare, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, Image as ImageIcon, FileText, Calendar, Settings, MessageSquare, LogOut, Package as PackageIcon, Type, HelpCircle } from "lucide-react";
 import { logout } from "@/app/login/actions";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,14 +16,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </Link>
           <p className="text-sm text-gray-400 mt-1 uppercase tracking-wider text-xs">Admin Dashboard</p>
         </div>
-
         <nav className="flex-1 px-4 py-6 space-y-2">
           <NavItem href="/admin" icon={<LayoutDashboard size={20} />} label="Overview" />
-          <NavItem href="/admin/services" icon={<FileText size={20} />} label="Services & Packages" />
+          <NavItem href="/admin/services" icon={<FileText size={20} />} label="Services" />
+          <NavItem href="/admin/packages" icon={<PackageIcon size={20} />} label="Packages" />
           <NavItem href="/admin/portfolio" icon={<ImageIcon size={20} />} label="Portfolio" />
           <NavItem href="/admin/bookings" icon={<Calendar size={20} />} label="Quotes & Bookings" />
           <NavItem href="/admin/testimonials" icon={<MessageSquare size={20} />} label="Testimonials" />
           <NavItem href="/admin/customers" icon={<Users size={20} />} label="Customers" />
+          <NavItem href="/admin/site-content" icon={<Type size={20} />} label="Site Content" />
+          <NavItem href="/admin/faqs" icon={<HelpCircle size={20} />} label="FAQs" />
           <NavItem href="/admin/settings" icon={<Settings size={20} />} label="Settings" />
         </nav>
 

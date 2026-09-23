@@ -3,60 +3,22 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2 } from "lucide-react";
+import { db } from "@/lib/db";
+import { packages } from "@/lib/schema";
+import { eq, asc } from "drizzle-orm";
 
 export const metadata = {
   title: "Packages | Ravenous Studio Production",
   description: "Pre-configured event production packages for weddings, funerals, corporate events, and gospel concerts.",
 };
 
-const packages = [
-  {
-    id: "pkg-1",
-    name: "Essentials",
-    tagline: "Single-camera coverage for intimate events",
-    price: 2000,
-    features: [
-      "1× Sony PXW-Z190 camera operator",
-      "Basic audio capture (2 wireless mics)",
-      "Edited highlight reel (3–5 min)",
-      "Delivery within 14 business days",
-    ],
-    highlighted: false,
-  },
-  {
-    id: "pkg-2",
-    name: "Professional",
-    tagline: "Multi-camera production with live stream",
-    price: 5500,
-    features: [
-      "3× camera operators (4K)",
-      "Live switching via Blackmagic ATEM",
-      "Multi-platform live stream (YouTube + Facebook)",
-      "Full-length edited video + highlight reel",
-      "On-site audio engineer with 8-channel mix",
-      "Delivery within 10 business days",
-    ],
-    highlighted: true,
-  },
-  {
-    id: "pkg-3",
-    name: "Stadium",
-    tagline: "Full-scale production with LED screens",
-    price: 12000,
-    features: [
-      "Everything in Professional",
-      "P3.91mm outdoor LED wall (up to 6×3m)",
-      "Novastar video processing",
-      "Dedicated LED technician",
-      "Drone aerial coverage",
-      "32-channel multi-track audio recording",
-      "Priority delivery within 7 business days",
-    ],
-    highlighted: false,
-  },
-];
+export const revalidate = 60; // revalidate every minute
 
-export default function PackagesPage() {
+export default async function PackagesPage() {
+  const dynamicPackages = await db.query.packages.findMany({
+    where: eq(packages.published, true),
+    orderBy: asc(packages.price),
+  });
   return (
     <>
       <section className="bg-deep-navy text-white pt-24 pb-16">
@@ -75,7 +37,7 @@ export default function PackagesPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
-            {packages.map((pkg) => (
+            {dynamicPackages.map((pkg) => (
               <Card
                 key={pkg.id}
                 className={cn(
@@ -90,18 +52,18 @@ export default function PackagesPage() {
                 )}
                 <CardHeader className={cn("pb-4", pkg.highlighted && "pt-10")}>
                   <CardTitle className="font-heading text-2xl text-secondary uppercase">{pkg.name}</CardTitle>
-                  <p className="text-muted-foreground text-sm mt-1">{pkg.tagline}</p>
+                  <p className="text-muted-foreground text-sm mt-1">{pkg.eventType}</p>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
                     <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider">Starting from</span>
                     <p className="font-heading font-bold text-4xl text-secondary">
-                      GHS {pkg.price.toLocaleString()}
+                      GHS {Number(pkg.price).toLocaleString()}
                     </p>
                   </div>
 
                   <ul className="space-y-3">
-                    {pkg.features.map((feature, i) => (
+                    {(pkg.features || []).map((feature, i) => (
                       <li key={i} className="flex items-start gap-2.5 text-sm">
                         <CheckCircle2 className="h-4 w-4 text-stage-gold shrink-0 mt-0.5" />
                         <span>{feature}</span>

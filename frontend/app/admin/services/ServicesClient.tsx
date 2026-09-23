@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { createService, deleteService, updateService } from "@/lib/actions";
 import { Edit, Trash2, Plus } from "lucide-react";
+import { MediaUploader } from "@/components/ui/media-uploader";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function ServicesClient({ initialServices }: { initialServices: any[] }) {
   const [services, setServices] = useState(initialServices);
@@ -22,7 +24,13 @@ export default function ServicesClient({ initialServices }: { initialServices: a
     equipmentUsed: "",
     startingPrice: "",
     categoryId: "00000000-0000-0000-0000-000000000000", // Dummy UUID for now, in a real app fetch categories
-    sortOrder: 0
+    sortOrder: 0,
+    isFeatured: false,
+    published: true,
+    seoTitle: "",
+    seoDescription: "",
+    coverMediaId: null,
+    coverMedia: null,
   });
 
   const resetForm = () => {
@@ -34,7 +42,13 @@ export default function ServicesClient({ initialServices }: { initialServices: a
       equipmentUsed: "",
       startingPrice: "",
       categoryId: "00000000-0000-0000-0000-000000000000",
-      sortOrder: 0
+      sortOrder: 0,
+      isFeatured: false,
+      published: true,
+      seoTitle: "",
+      seoDescription: "",
+      coverMediaId: null,
+      coverMedia: null,
     });
     setIsEditing(false);
   };
@@ -115,6 +129,14 @@ export default function ServicesClient({ initialServices }: { initialServices: a
                 </div>
               </div>
 
+              <div className="space-y-2 pt-2">
+                <MediaUploader 
+                  label="Cover Image"
+                  currentMediaUrl={formData.coverMedia?.deliveryUrl}
+                  onUploadSuccess={(id, url) => setFormData({...formData, coverMediaId: id || null, coverMedia: { deliveryUrl: url }})}
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="shortDescription">Short Description *</Label>
                 <Input id="shortDescription" required value={formData.shortDescription} onChange={e => setFormData({...formData, shortDescription: e.target.value})} />
@@ -138,6 +160,36 @@ export default function ServicesClient({ initialServices }: { initialServices: a
                 <div className="space-y-2">
                   <Label htmlFor="sortOrder">Sort Order</Label>
                   <Input id="sortOrder" type="number" value={formData.sortOrder} onChange={e => setFormData({...formData, sortOrder: e.target.value})} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-2">
+                <div className="space-y-2">
+                  <Label htmlFor="seoTitle">SEO Title</Label>
+                  <Input id="seoTitle" value={formData.seoTitle || ""} onChange={e => setFormData({...formData, seoTitle: e.target.value})} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="seoDescription">SEO Description</Label>
+                  <Input id="seoDescription" value={formData.seoDescription || ""} onChange={e => setFormData({...formData, seoDescription: e.target.value})} />
+                </div>
+              </div>
+
+              <div className="flex gap-6 py-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="published" 
+                    checked={formData.published} 
+                    onCheckedChange={(c) => setFormData({...formData, published: !!c})} 
+                  />
+                  <Label htmlFor="published">Published</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox 
+                    id="isFeatured" 
+                    checked={formData.isFeatured} 
+                    onCheckedChange={(c) => setFormData({...formData, isFeatured: !!c})} 
+                  />
+                  <Label htmlFor="isFeatured">Feature on Homepage</Label>
                 </div>
               </div>
 

@@ -11,10 +11,25 @@ import {
   projectMedia,
   bookings,
   users,
-  settings
+  settings,
+  packages,
+  siteContent
 } from "./schema";
 import { eq, desc, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { createClient } from "@supabase/supabase-js";
+import { v2 as cloudinary } from "cloudinary";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
+
+cloudinary.config({
+  cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // ----------------------------------------------------------------------------
 // PUBLIC DATA FETCHERS
@@ -301,5 +316,147 @@ export async function deleteSetting(id: string) {
   await db.delete(settings).where(eq(settings.id, id));
   revalidatePath("/admin/settings");
   revalidatePath("/");
+  return { success: true };
+}
+
+// ----------------------------------------------------------------------------
+// ADMIN MUTATIONS (MEDIA UPLOAD)
+// ----------------------------------------------------------------------------
+
+export async function uploadMedia(formData: FormData) {
+  const file = formData.get("file") as File;
+  if (!file) throw new Error("No file uploaded");
+
+  const bytes = await file.arrayBuffer();
+  const buffer = Buffer.from(bytes);
+
+  const uploadResult = await new Promise((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { 
+        folder: "Ravenous",
+        resource_type: "auto"
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    ).end(buffer);
+  }) as any;
+
+  // Insert into media_library
+  // We need a dummy user ID for uploadedBy if we don't have the session easily
+  const adminUser = await db.query.users.findFirst({ where: eq(users.role, "admin") });
+  
+  if (!adminUser) {
+    throw new Error("No admin user found to assign upload to");
+  }
+
+  const [media] = await db.insert(mediaLibrary).values({
+    type: file.type.startsWith("video") ? "video" : "image",
+    category: "general",
+    title: file.name,
+    altText: file.name,
+    cloudinaryPublicId: uploadResult.public_id,
+    deliveryUrl: uploadResult.secure_url,
+    status: "ready",
+    uploadedBy: adminUser.id
+  }).returning();
+
+  return media;
+}
+
+// ----------------------------------------------------------------------------
+// ADMIN MUTATIONS (PACKAGES)
+// ----------------------------------------------------------------------------
+
+export async function getAdminPackages() {
+  return await db.query.packages.findMany({
+    orderBy: desc(packages.price),
+  });
+}
+
+export async function createPackage(data: any) {
+  const [pkg] = await db.insert(packages).values(data).returning();
+  revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  return pkg;
+}
+
+export async function updatePackage(id: string, data: any) {
+  const [pkg] = await db.update(packages).set(data).where(eq(packages.id, id)).returning();
+  revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  return pkg;
+}
+
+export async function deletePackage(id: string) {
+  await db.delete(packages).where(eq(packages.id, id));
+  revalidatePath("/admin/packages");
+  revalidatePath("/packages");
+  return { success: true };
+}
+
+// ----------------------------------------------------------------------------
+// ADMIN MUTATIONS (SITE CONTENT)
+// ----------------------------------------------------------------------------
+
+export async function getAdminSiteContent() {
+  return await db.query.siteContent.findMany({
+    orderBy: desc(siteContent.updatedAt),
+  });
+}
+
+export async function saveSiteContent(key: string, value: any) {
+  const [content] = await db
+    .insert(siteContent)
+    .values({ key, value })
+    .onConflictDoUpdate({
+      target: siteContent.key,
+      set: { value, updatedAt: new Date() },
+    })
+    .returning();
+    
+  revalidatePath("/admin/site-content");
+  revalidatePath("/");
+  revalidatePath("/about");
+  return content;
+}
+
+export async function deleteSiteContent(id: string) {
+  await db.delete(siteContent).where(eq(siteContent.id, id));
+  revalidatePath("/admin/site-content");
+  revalidatePath("/");
+  revalidatePath("/about");
+  return { success: true };
+}
+
+// ----------------------------------------------------------------------------
+// ADMIN MUTATIONS (FAQS)
+// ----------------------------------------------------------------------------
+
+export async function getAdminFaqs() {
+  return await db.query.faqs.findMany({
+    orderBy: desc(faqs.sortOrder),
+  });
+}
+
+export async function createFaq(data: any) {
+  const [faq] = await db.insert(faqs).values(data).returning();
+  revalidatePath("/admin/faqs");
+  revalidatePath("/about"); // if faqs are on about
+  return faq;
+}
+
+export async function updateFaq(id: string, data: any) {
+  const [faq] = await db.update(faqs).set(data).where(eq(faqs.id, id)).returning();
+  revalidatePath("/admin/faqs");
+  revalidatePath("/about");
+  return faq;
+}
+
+export async function deleteFaq(id: string) {
+  await db.delete(faqs).where(eq(faqs.id, id));
+  revalidatePath("/admin/faqs");
+  revalidatePath("/about");
   return { success: true };
 }

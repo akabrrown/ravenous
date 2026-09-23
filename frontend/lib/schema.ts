@@ -59,7 +59,8 @@ export const mediaLibrary = pgTable("media_library", {
   title: text("title").notNull(),
   description: text("description"),
   altText: text("alt_text").notNull(),
-  cloudinaryPublicId: text("cloudinary_public_id").notNull().unique(),
+  cloudinaryPublicId: text("cloudinary_public_id").unique(),
+  storagePath: text("storage_path").unique(),
   deliveryUrl: text("delivery_url").notNull(),
   width: integer("width"),
   height: integer("height"),
@@ -92,6 +93,8 @@ export const packages = pgTable("packages", {
   eventType: text("event_type").notNull(),
   description: text("description").notNull(),
   price: numeric("price", { precision: 12, scale: 2 }),
+  features: text("features").array().notNull().default([]),
+  highlighted: boolean("highlighted").default(false).notNull(),
   published: boolean("published").default(true).notNull(),
 });
 

@@ -5,11 +5,15 @@ import { getFeaturedServices, getFeaturedPortfolio, getTestimonials } from "@/li
 import { ArrowRight, Play, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { HeroSlideshow } from "@/components/ui/hero-slideshow";
+import { db } from "@/lib/db";
 
 export default async function Home() {
   const featuredServices = await getFeaturedServices();
   const featuredPortfolio = await getFeaturedPortfolio();
   const testimonials = await getTestimonials();
+  const siteContentList = await db.query.siteContent.findMany();
+  
+  const contentMap = siteContentList.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, any>);
 
   return (
     <>
@@ -21,16 +25,25 @@ export default async function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-4xl py-12 md:py-16">
             <p className="text-sm font-bold uppercase tracking-[0.2em] text-stage-gold mb-6">
-              Accra &middot; Ghana
+              {contentMap["hero_subtitle"] || "Accra · Ghana"}
             </p>
 
             <h1 className="font-heading font-bold tracking-tighter leading-[1.05] mb-6">
-              <span className="block text-4xl md:text-5xl lg:text-6xl text-white">LED SCREENS & <span className="text-primary">LIVE STREAMS</span></span>
-              <span className="block text-4xl md:text-5xl lg:text-6xl text-white/40 mt-1">4K RECORDING & FULL COVERAGE</span>
+              <span className="block text-4xl md:text-5xl lg:text-6xl text-white">
+                {(contentMap["hero_title"] || "LED SCREENS & LIVE STREAMS").split('&').map((part: string, i: number, arr: any[]) => (
+                  <span key={i}>
+                    {part.trim()}
+                    {i < arr.length - 1 && <span className="text-primary"> & </span>}
+                  </span>
+                ))}
+              </span>
+              <span className="block text-4xl md:text-5xl lg:text-6xl text-white/40 mt-1">
+                {contentMap["hero_title_secondary"] || "4K RECORDING & FULL COVERAGE"}
+              </span>
             </h1>
 
             <p className="text-base md:text-lg text-gray-300 max-w-2xl mb-8 leading-relaxed">
-              Modular LED walls, multi-camera broadcast rigs, and on-site audio engineering for concerts, weddings, and corporate events.
+              {contentMap["hero_description"] || "Modular LED walls, multi-camera broadcast rigs, and on-site audio engineering for concerts, weddings, and corporate events."}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-10">

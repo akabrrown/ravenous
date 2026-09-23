@@ -1,7 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Users, DollarSign, Activity } from "lucide-react";
+import { db } from "@/lib/db";
+import { bookings, quoteRequests, users } from "@/lib/schema";
+import { count, eq, inArray } from "drizzle-orm";
 
-export default function AdminDashboardPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AdminDashboardPage() {
+  const activeBookingsResult = await db.select({ value: count() })
+    .from(bookings)
+    .where(inArray(bookings.status, ["confirmed", "in_progress"]));
+  const activeBookings = activeBookingsResult[0].value;
+
+  const pendingQuotesResult = await db.select({ value: count() })
+    .from(quoteRequests)
+    .where(eq(quoteRequests.status, "new"));
+  const pendingQuotes = pendingQuotesResult[0].value;
+
+  const totalClientsResult = await db.select({ value: count() })
+    .from(users)
+    .where(eq(users.role, "customer"));
+  const totalClients = totalClientsResult[0].value;
   return (
     <div className="space-y-8">
       <div>
@@ -12,26 +31,26 @@ export default function AdminDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard 
           title="Active Bookings" 
-          value="12" 
-          description="+2 from last month"
+          value={activeBookings.toString()} 
+          description="Confirmed & in progress"
           icon={<Calendar className="h-4 w-4 text-muted-foreground" />} 
         />
         <StatCard 
           title="Pending Quotes" 
-          value="5" 
-          description="3 need your response"
+          value={pendingQuotes.toString()} 
+          description="Needs response"
           icon={<Activity className="h-4 w-4 text-muted-foreground" />} 
         />
         <StatCard 
           title="Total Clients" 
-          value="148" 
-          description="+12 this year"
+          value={totalClients.toString()} 
+          description="Registered customers"
           icon={<Users className="h-4 w-4 text-muted-foreground" />} 
         />
         <StatCard 
           title="Revenue (MTD)" 
-          value="₵ 45,200" 
-          description="+18% from last month"
+          value="₵ 0" 
+          description="Payment integration pending"
           icon={<DollarSign className="h-4 w-4 text-muted-foreground" />} 
         />
       </div>
