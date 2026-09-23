@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { blog_posts } from "@/lib/mock-data";
+import { getBlogPostBySlug } from "@/lib/actions";
 import { ArrowRight, Calendar, User, Share2 } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = blog_posts.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return { title: "Post Not Found" };
 
   return {
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = blog_posts.find((p) => p.slug === slug);
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     notFound();
@@ -41,11 +41,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <div className="flex flex-wrap items-center gap-6 text-sm font-bold uppercase tracking-wider text-gray-400 border-t border-white/10 pt-6">
               <div className="flex items-center">
                 <Calendar className="mr-2 h-4 w-4 text-primary" />
-                {new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-              </div>
-              <div className="flex items-center">
-                <User className="mr-2 h-4 w-4 text-primary" />
-                {post.author}
+                {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : 'Unpublished'}
               </div>
             </div>
           </div>
@@ -56,7 +52,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl -mt-8 relative z-10">
             <div className="aspect-[21/9] w-full bg-muted shadow-2xl rounded-sm overflow-hidden border border-border">
               <img 
-                src={post.cover_media || "/placeholder.webp"} 
+                src={post.coverMedia?.deliveryUrl || "/placeholder.webp"} 
                 alt={post.title}
                 className="w-full h-full object-cover"
               />

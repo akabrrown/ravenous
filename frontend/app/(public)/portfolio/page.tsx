@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { portfolio } from "@/lib/mock-data";
+import { getAllPortfolio } from "@/lib/actions";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
@@ -9,7 +9,8 @@ export const metadata = {
   description: "View our recent live event productions, including weddings, gospel concerts, and corporate events.",
 };
 
-export default function PortfolioIndexPage() {
+export default async function PortfolioIndexPage() {
+  const portfolio = await getAllPortfolio();
   // In a real app, we'd extract unique event types dynamically.
   const categories = ["All", "Wedding", "Gospel", "Corporate", "Outdoor", "Funeral"];
 
@@ -48,12 +49,12 @@ export default function PortfolioIndexPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {portfolio.map((project) => (
               <Link key={project.id} href={`/portfolio/${project.id}`} className="group relative aspect-square rounded-sm overflow-hidden bg-muted cursor-pointer border border-border block">
-                <img src={project.cover_media} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
+                <img src={project.coverMedia?.deliveryUrl || "/placeholder.webp"} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-navy/90 via-deep-navy/30 to-transparent"></div>
                 
                 <div className="absolute bottom-0 left-0 w-full p-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                   <div className="inline-block px-3 py-1 bg-primary text-white text-xs font-bold uppercase mb-3 rounded-sm">
-                    {project.event_type}
+                    {project.eventType}
                   </div>
                   <h3 className="font-heading text-2xl font-bold text-white mb-2 leading-tight">{project.title}</h3>
                   <p className="text-gray-300 text-sm line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">

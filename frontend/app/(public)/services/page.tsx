@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { services } from "@/lib/mock-data";
+import { getAllServices } from "@/lib/actions";
 import { ArrowRight } from "lucide-react";
 
 export const metadata = {
@@ -9,7 +9,9 @@ export const metadata = {
   description: "Explore our professional event production services including LED screen rentals, live streaming, and event coverage.",
 };
 
-export default function ServicesIndexPage() {
+export default async function ServicesIndexPage() {
+  const services = await getAllServices();
+
   return (
     <>
       <section className="bg-deep-navy text-white pt-24 pb-16">
@@ -34,7 +36,7 @@ export default function ServicesIndexPage() {
                 {/* Image Side */}
                 <div className="w-full lg:w-1/2">
                   <div className="aspect-[4/3] bg-muted relative rounded-sm overflow-hidden border border-border shadow-md group">
-                    <img src={service.cover_media || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
+                    <img src={service.coverMedia?.deliveryUrl || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 </div>
                 
@@ -45,10 +47,10 @@ export default function ServicesIndexPage() {
                     {service.description}
                   </p>
                   
-                  {service.starting_price && (
+                  {service.startingPrice && (
                     <div className="inline-block bg-off-white border border-border px-4 py-2 rounded-sm mt-2">
                       <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider">Starting from</span>
-                      <p className="font-heading font-bold text-2xl text-secondary">GHS {service.starting_price.toLocaleString()}</p>
+                      <p className="font-heading font-bold text-2xl text-secondary">GHS {Number(service.startingPrice).toLocaleString()}</p>
                     </div>
                   )}
 

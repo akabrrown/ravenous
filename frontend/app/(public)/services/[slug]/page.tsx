@@ -2,23 +2,23 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { services } from "@/lib/mock-data";
+import { getServiceBySlug } from "@/lib/actions";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  const service = await getServiceBySlug(slug);
   if (!service) return { title: "Service Not Found" };
 
   return {
     title: `${service.name} | Ravenous Studio Production`,
-    description: service.short_description,
+    description: service.shortDescription,
   };
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
+  const service = await getServiceBySlug(slug);
 
   if (!service) {
     notFound();
@@ -31,7 +31,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         {/* Background Image with Overlay */}
         <div className="absolute inset-0 z-0">
           <img 
-            src={service.cover_media || "/placeholder.webp"} 
+            src={service.coverMedia?.deliveryUrl || "/placeholder.webp"} 
             alt={service.name} 
             className="w-full h-full object-cover"
           />
@@ -47,7 +47,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               {service.name}
             </h1>
             <p className="text-xl md:text-2xl text-gray-200">
-              {service.short_description}
+              {service.shortDescription}
             </p>
           </div>
         </div>
@@ -67,11 +67,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 </p>
               </div>
 
-              {service.equipment_used && service.equipment_used.length > 0 && (
+              {service.equipmentUsed && service.equipmentUsed.length > 0 && (
                 <div>
                   <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-6">Equipment Included</h2>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {service.equipment_used.map((item, idx) => (
+                    {service.equipmentUsed.map((item, idx) => (
                       <li key={idx} className="flex items-start bg-off-white p-4 rounded-sm border border-border">
                         <CheckCircle2 className="h-5 w-5 text-stage-gold shrink-0 mt-0.5 mr-3" />
                         <span className="font-medium text-secondary">{item}</span>
@@ -88,11 +88,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <h3 className="font-heading font-bold text-2xl uppercase text-secondary mb-2">Book This Service</h3>
                 <p className="text-muted-foreground mb-6">Get a customized quote for your specific event requirements.</p>
                 
-                {service.starting_price && (
+                {service.startingPrice && (
                   <div className="mb-8 pb-8 border-b border-border">
                     <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider block mb-1">Starting from</span>
                     <p className="font-heading font-bold text-4xl text-primary">
-                      GHS {service.starting_price.toLocaleString()}
+                      GHS {Number(service.startingPrice).toLocaleString()}
                     </p>
                   </div>
                 )}

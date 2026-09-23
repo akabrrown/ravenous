@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { services, portfolio, testimonials } from "@/lib/mock-data";
+import { getFeaturedServices, getFeaturedPortfolio, getTestimonials } from "@/lib/actions";
 import { ArrowRight, Play, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { HeroSlideshow } from "@/components/ui/hero-slideshow";
 
-export default function Home() {
-  const featuredServices = services.filter(s => s.is_featured);
-  const featuredPortfolio = portfolio.filter(p => p.is_featured);
+export default async function Home() {
+  const featuredServices = await getFeaturedServices();
+  const featuredPortfolio = await getFeaturedPortfolio();
+  const testimonials = await getTestimonials();
 
   return (
     <>
@@ -96,13 +97,13 @@ export default function Home() {
               <Card key={service.id} className="group hover:shadow-xl transition-all duration-300 border-border/50 hover:border-primary/50 overflow-hidden bg-white">
                 <div className="h-48 bg-muted relative overflow-hidden">
                   <div className="absolute inset-0 bg-secondary/10 group-hover:bg-transparent transition-colors z-10"></div>
-                  <img src={service.cover_media || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
+                  <img src={service.coverMedia?.deliveryUrl || "/placeholder.webp"} alt={service.name} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" />
                 </div>
                 <CardHeader>
                   <CardTitle className="font-heading text-xl text-secondary uppercase">{service.name}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground">{service.short_description}</p>
+                  <p className="text-muted-foreground">{service.shortDescription}</p>
                 </CardContent>
                 <CardFooter className="pt-4 border-t border-border/50">
                   <Link href={`/services/${service.slug}`} className="text-primary font-medium flex items-center group-hover:underline">
@@ -171,12 +172,12 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {featuredPortfolio.map((project) => (
               <Link key={project.id} href={`/portfolio/${project.id}`} className="group relative aspect-[4/3] rounded-sm overflow-hidden bg-muted cursor-pointer border border-border block">
-                <img src={project.cover_media} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
+                <img src={project.coverMedia?.deliveryUrl || "/placeholder.webp"} alt={project.title} className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-0 bg-gradient-to-t from-deep-navy/90 via-deep-navy/20 to-transparent"></div>
                 
                 <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                   <div className="inline-block px-3 py-1 bg-primary text-white text-xs font-bold uppercase mb-3 rounded-sm">
-                    {project.event_type}
+                    {project.eventType}
                   </div>
                   <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">{project.title}</h3>
                   <p className="text-gray-300 line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
@@ -214,11 +215,18 @@ export default function Home() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg text-foreground italic mb-6">"{t.quote_text}"</p>
-                  <p className="font-bold text-secondary">{t.customer_name}</p>
+                  <p className="text-lg text-foreground italic mb-6">"{t.quoteText}"</p>
+                  <p className="font-bold text-secondary">{t.customerName}</p>
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-muted-foreground mb-4">Have you worked with us recently?</p>
+            <Link href="/review" className={buttonVariants({ variant: "outline" })}>
+              Leave a Review
+            </Link>
           </div>
         </div>
       </section>

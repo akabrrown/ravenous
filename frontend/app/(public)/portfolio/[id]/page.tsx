@@ -2,12 +2,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { portfolio, services } from "@/lib/mock-data";
+import { getPortfolioById, getAllServices } from "@/lib/actions";
 import { ArrowRight, Calendar, MapPin, User, Tag } from "lucide-react";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const project = portfolio.find((p) => p.id === id);
+  const project = await getPortfolioById(id);
   if (!project) return { title: "Project Not Found" };
 
   return {
@@ -18,15 +18,16 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function PortfolioDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const project = portfolio.find((p) => p.id === id);
+  const project = await getPortfolioById(id);
+  const allServices = await getAllServices();
 
   if (!project) {
     notFound();
   }
 
   // Map service IDs back to full service objects for rendering links
-  const projectServices = project.services_provided
-    .map(serviceId => services.find(s => s.id === serviceId))
+  const projectServices = project.servicesProvided
+    .map(serviceId => allServices.find(s => s.id === serviceId))
     .filter(s => s !== undefined);
 
   return (
@@ -38,7 +39,7 @@ export default async function PortfolioDetailPage({ params }: { params: Promise<
           </Link>
           <div className="max-w-4xl">
             <div className="inline-block px-3 py-1 bg-white/10 text-stage-gold text-xs font-bold uppercase tracking-widest rounded-sm mb-6 border border-stage-gold/30">
-              {project.event_type}
+              {project.eventType}
             </div>
             <h1 className="font-heading font-bold text-4xl md:text-6xl uppercase tracking-tight mb-6">
               {project.title}
@@ -55,7 +56,7 @@ export default async function PortfolioDetailPage({ params }: { params: Promise<
             <div className="w-full lg:w-2/3 space-y-8">
               <div className="aspect-video bg-muted rounded-sm overflow-hidden border border-border">
                 <img 
-                  src={project.cover_media || "/placeholder.webp"} 
+                  src={project.coverMedia?.deliveryUrl || "/placeholder.webp"} 
                   alt={project.title}
                   className="w-full h-full object-cover"
                 />
@@ -85,7 +86,7 @@ export default async function PortfolioDetailPage({ params }: { params: Promise<
                     <User className="h-5 w-5 text-primary shrink-0 mr-4 mt-0.5" />
                     <div>
                       <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Client</p>
-                      <p className="font-medium text-secondary text-lg">{project.client_name}</p>
+                      <p className="font-medium text-secondary text-lg">{project.clientName}</p>
                     </div>
                   </div>
 
@@ -94,7 +95,7 @@ export default async function PortfolioDetailPage({ params }: { params: Promise<
                     <div>
                       <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Date</p>
                       <p className="font-medium text-secondary text-lg">
-                        {new Date(project.event_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                        {project.eventDate ? new Date(project.eventDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "Date unavailable"}
                       </p>
                     </div>
                   </div>
