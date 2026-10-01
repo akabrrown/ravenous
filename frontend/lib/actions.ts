@@ -362,13 +362,18 @@ export async function uploadMedia(formData: FormData) {
 
   cloudinary.config({ cloud_name: cloudName, api_key: apiKey, api_secret: apiSecret });
 
+  // Generate a unique public_id: timestamp + sanitized filename (no extension)
+  const baseName = file.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_");
+  const uniquePublicId = `${baseName}_${Date.now()}`;
+
   let uploadResult;
   try {
     uploadResult = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
         { 
           folder: "Ravenous",
-          resource_type: "auto"
+          resource_type: "auto",
+          public_id: uniquePublicId,
         },
         (error, result) => {
           if (error) {
@@ -411,7 +416,12 @@ export async function uploadMedia(formData: FormData) {
     deliveryUrl: uploadResult.secure_url,
     status: "ready",
     uploadedBy: adminUser.id
-  }).returning();
+  })
+  .onConflictDoUpdate({
+    target: mediaLibrary.cloudinaryPublicId,
+    set: { deliveryUrl: uploadResult.secure_url }
+  })
+  .returning();
 
   return {
     id: media.id,
