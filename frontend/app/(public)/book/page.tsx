@@ -120,7 +120,7 @@ export default function BookPage() {
                 </fieldset>
 
                 <div className="bg-off-white border border-border rounded-sm p-4 text-sm text-muted-foreground">
-                  By submitting, you acknowledge that a 50% non-refundable deposit is required to secure your date. Full payment terms will be included in your invoice.
+                  By submitting, you acknowledge that a 50% non-refundable deposit is required to secure your date. Full payment terms (including Mobile Money to 055 247 1202 or Bank Transfer) will be included in your invoice.
                 </div>
 
                 <Button type="submit" size="lg" className="w-full uppercase font-bold tracking-wide">

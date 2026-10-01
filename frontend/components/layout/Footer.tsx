@@ -65,9 +65,9 @@ export function Footer() {
             <h3 className="font-heading font-bold text-lg mb-4 text-white">Contact</h3>
             <address className="not-italic space-y-2 text-sm text-gray-300">
               <p>Madina Mayehot, Accra</p>
-              <p>Phone: 055 247 1202 / 054 050 0729</p>
+              <p>Phone: 055 247 1202 / 054 050 0729 / 059 997 7213</p>
               <p>Email: ravenousstudioproduction@gmail.com</p>
-              <p>Hours: Mon-Sat, 9AM-6PM</p>
+              <p>Hours: Mon - Fri 8am - 5pm, Sat 8am - 4pm</p>
             </address>
           </div>
         </div>

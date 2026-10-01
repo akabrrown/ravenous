@@ -51,7 +51,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Phone & WhatsApp</h3>
-                    <p className="text-muted-foreground">055 247 1202 / 054 050 0729</p>
+                    <p className="text-muted-foreground">055 247 1202 / 054 050 0729 / 059 997 7213</p>
                   </div>
                 </div>
 
@@ -71,7 +71,19 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Operating Hours</h3>
-                    <p className="text-muted-foreground">Mon-Sat, 9:00 AM - 6:00 PM</p>
+                    <p className="text-muted-foreground">Mon - Fri: 8:00 AM - 5:00 PM</p>
+                    <p className="text-muted-foreground">Sat: 8:00 AM - 4:00 PM</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <span className="font-bold text-primary">GH₵</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-secondary uppercase mb-1">Payments</h3>
+                    <p className="text-muted-foreground">Mobile Money: 055 247 1202</p>
+                    <p className="text-muted-foreground">Bank Account: Upon request</p>
                   </div>
                 </div>
               </div>

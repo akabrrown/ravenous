@@ -29,7 +29,7 @@ export default function TermsPage() {
 
           <h2>1. Booking and Payment</h2>
           <p>
-            A non-refundable deposit of 50% is required to secure your booking date. The remaining balance must be paid in full 7 days prior to the event date. Failure to complete payment may result in cancellation of services.
+            A non-refundable deposit of 50% is required to secure your booking date. The remaining balance must be paid in full 7 days prior to the event date. Payments can be made via Mobile Money (055 247 1202) or Bank Transfer (details provided upon request). Failure to complete payment may result in cancellation of services.
           </p>
 
           <h2>2. Cancellations</h2>
