@@ -28,7 +28,7 @@ export default function BookPage() {
             <CheckCircle2 className="h-16 w-16 text-stage-gold mx-auto mb-6" />
             <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-4">Booking request received</h2>
             <p className="text-muted-foreground text-lg mb-8">
-              We'll confirm availability and send you an invoice with the 50% deposit details within 24 hours. Check your email.
+              We'll confirm availability and get back to you with pricing and availability details within 24 hours. Check your email for a confirmation.
             </p>
           </div>
         </section>
@@ -92,7 +92,7 @@ export default function BookPage() {
                     >
                       <option value="">Select a service</option>
                       {services.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name} — from GHS {s.starting_price.toLocaleString()}</option>
+                        <option key={s.id} value={s.id}>{s.name}</option>
                       ))}
                     </select>
                   </div>
@@ -120,7 +120,7 @@ export default function BookPage() {
                 </fieldset>
 
                 <div className="bg-off-white border border-border rounded-sm p-4 text-sm text-muted-foreground">
-                  By submitting, you acknowledge that a 50% non-refundable deposit is required to secure your date. Full payment terms (including Mobile Money to 055 247 1202 or Bank Transfer) will be included in your invoice.
+                  By submitting, you acknowledge our team will review your request and send you a detailed quote with full payment terms.
                 </div>
 
                 <Button type="submit" size="lg" className="w-full uppercase font-bold tracking-wide">

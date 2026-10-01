@@ -90,14 +90,11 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                 <h3 className="font-heading font-bold text-2xl uppercase text-secondary mb-2">Book This Service</h3>
                 <p className="text-muted-foreground mb-6">Get a customized quote for your specific event requirements.</p>
                 
-                {service.startingPrice && (
-                  <div className="mb-8 pb-8 border-b border-border">
-                    <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider block mb-1">Starting from</span>
-                    <p className="font-heading font-bold text-4xl text-primary">
-                      GHS {Number(service.startingPrice).toLocaleString()}
-                    </p>
-                  </div>
-                )}
+                <div className="mb-8 pb-8 border-b border-border">
+                  <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider block mb-1">Pricing</span>
+                  <p className="font-heading font-bold text-2xl text-primary uppercase">Contact for Pricing</p>
+                  <p className="text-sm text-muted-foreground mt-1">We'll tailor a quote to your exact event needs.</p>
+                </div>
 
                 <div className="space-y-4">
                   <Link 

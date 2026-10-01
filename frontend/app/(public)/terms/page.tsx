@@ -29,12 +29,12 @@ export default function TermsPage() {
 
           <h2>1. Booking and Payment</h2>
           <p>
-            A non-refundable deposit of 50% is required to secure your booking date. The remaining balance must be paid in full 7 days prior to the event date. Payments can be made via Mobile Money (055 247 1202) or Bank Transfer (details provided upon request). Failure to complete payment may result in cancellation of services.
+            A deposit is required to secure your booking date. The remaining balance must be paid in full prior to the event date. Payments can be made via Mobile Money (055 247 1202) or Bank Transfer (details provided upon request). The exact deposit amount and schedule will be confirmed in your booking invoice. Failure to complete payment may result in cancellation of services.
           </p>
 
           <h2>2. Cancellations</h2>
           <p>
-            Cancellations made more than 30 days before the event will forfeit the deposit but incur no additional charges. Cancellations made within 30 days of the event will require full payment of the agreed contract amount.
+            Cancellations made more than 30 days before the event will forfeit the deposit but incur no additional charges. Cancellations made within 30 days of the event may be subject to additional fees as outlined in your booking invoice.
           </p>
 
           <h2>3. Equipment and Venue Access</h2>

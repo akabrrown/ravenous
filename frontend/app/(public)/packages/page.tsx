@@ -30,7 +30,7 @@ export default async function PackagesPage() {
               Production <span className="text-primary">Packages</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300">
-              Fixed-price packages designed around common event sizes. Need something custom? Request a tailored quote.
+              Packages tailored around common event types. Pricing is provided on request — contact us for a quote specific to your event.
             </p>
           </div>
         </div>
