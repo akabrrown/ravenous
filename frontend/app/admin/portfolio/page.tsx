@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getAdminPortfolio } from "@/lib/actions";
 import PortfolioClient from "./PortfolioClient";
 

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Metadata } from "next";
 import { getAdminPackages } from "@/lib/actions";
 import PackagesClient from "./PackagesClient";

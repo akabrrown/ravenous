@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, Video, Camera, MonitorPlay } from "lucide-react";
 import { db } from "@/lib/db";
