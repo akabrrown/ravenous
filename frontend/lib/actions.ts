@@ -13,7 +13,8 @@ import {
   users,
   settings,
   packages,
-  siteContent
+  siteContent,
+  serviceCategories
 } from "./schema";
 import { eq, desc, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -198,6 +199,20 @@ export async function getAdminSettings() {
 // ----------------------------------------------------------------------------
 
 export async function createService(data: typeof services.$inferInsert) {
+  if (!data.categoryId || data.categoryId === "00000000-0000-0000-0000-000000000000") {
+    const cat = await db.query.serviceCategories.findFirst();
+    if (cat) {
+      data.categoryId = cat.id;
+    } else {
+      const [newCat] = await db.insert(serviceCategories).values({
+        name: "General",
+        slug: "general-" + Date.now(),
+        sortOrder: 1
+      }).returning();
+      data.categoryId = newCat.id;
+    }
+  }
+
   await db.insert(services).values(data);
   revalidatePath("/admin/services");
   revalidatePath("/services");
@@ -338,25 +353,44 @@ export async function uploadMedia(formData: FormData) {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  const uploadResult = await new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream(
-      { 
-        folder: "Ravenous",
-        resource_type: "auto"
-      },
-      (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
-      }
-    ).end(buffer);
-  }) as any;
+  let uploadResult;
+  try {
+    uploadResult = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { 
+          folder: "Ravenous",
+          resource_type: "auto"
+        },
+        (error, result) => {
+          if (error) {
+            console.error("Cloudinary error:", error);
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      ).end(buffer);
+    }) as any;
+  } catch (err) {
+    console.error("Upload stream rejected:", err);
+    throw new Error("Cloudinary upload failed");
+  }
 
   // Insert into media_library
-  // We need a dummy user ID for uploadedBy if we don't have the session easily
-  const adminUser = await db.query.users.findFirst({ where: eq(users.role, "admin") });
+  let adminUser = await db.query.users.findFirst({ where: eq(users.role, "admin") });
   
   if (!adminUser) {
-    throw new Error("No admin user found to assign upload to");
+    adminUser = await db.query.users.findFirst();
+  }
+  if (!adminUser) {
+    // Create a fallback user if absolutely empty
+    const [newUser] = await db.insert(users).values({
+      fullName: "System Fallback",
+      email: `fallback_${Date.now()}@ravenous.com`,
+      role: "admin",
+      isStaff: true
+    }).returning();
+    adminUser = newUser;
   }
 
   const [media] = await db.insert(mediaLibrary).values({
