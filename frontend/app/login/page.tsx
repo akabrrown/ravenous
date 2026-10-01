@@ -1,14 +1,25 @@
+import Link from 'next/link'
 import { login } from './actions'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { ArrowLeft } from 'lucide-react'
 
 export default async function LoginPage(props: { searchParams: Promise<{ error?: string }> }) {
   const searchParams = await props.searchParams;
   
   return (
     <div className="min-h-screen bg-off-white flex flex-col justify-center items-center p-4">
+      <div className="w-full max-w-md mb-4">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors font-medium"
+        >
+          <ArrowLeft size={16} />
+          Back to site
+        </Link>
+      </div>
       <Card className="w-full max-w-md bg-white border-border shadow-sm">
         <CardHeader className="text-center space-y-2">
           <CardTitle className="font-heading font-bold text-3xl uppercase tracking-wider text-secondary">
