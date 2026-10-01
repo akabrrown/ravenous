@@ -73,7 +73,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-600/30 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Ravenous Studio Production. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Ravenous Studio Production. All rights reserved. | Powered by Codey Dev</p>
           <div className="flex items-center gap-4 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
