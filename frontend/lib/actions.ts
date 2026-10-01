@@ -404,7 +404,11 @@ export async function uploadMedia(formData: FormData) {
     uploadedBy: adminUser.id
   }).returning();
 
-  return media;
+  return {
+    id: media.id,
+    deliveryUrl: media.deliveryUrl,
+    type: media.type
+  };
 }
 
 // ----------------------------------------------------------------------------
