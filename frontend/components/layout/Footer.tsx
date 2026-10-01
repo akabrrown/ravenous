@@ -68,6 +68,7 @@ export function Footer() {
               <p>Phone: 055 247 1202 / 054 050 0729 / 059 997 7213</p>
               <p>Email: ravenousstudioproduction@gmail.com</p>
               <p>Hours: Mon - Fri 8am - 5pm, Sat 8am - 4pm</p>
+              <p>MoMo: 055 247 1202 &middot; Bank: Upon request</p>
             </address>
           </div>
         </div>

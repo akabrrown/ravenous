@@ -28,8 +28,13 @@ export default function BookPage() {
             <CheckCircle2 className="h-16 w-16 text-stage-gold mx-auto mb-6" />
             <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-4">Booking request received</h2>
             <p className="text-muted-foreground text-lg mb-8">
-              We'll confirm availability and get back to you with pricing and availability details within 24 hours. Check your email for a confirmation.
+              We'll confirm availability and get back to you with a detailed quote within 24 hours. Check your email for a confirmation.
             </p>
+            <div className="mt-6 bg-off-white border border-border rounded-sm p-4 text-sm text-left space-y-1">
+              <p className="font-bold text-secondary uppercase tracking-wide text-xs mb-2">Payment Methods</p>
+              <p className="text-muted-foreground">📱 Mobile Money: <span className="font-semibold text-secondary">055 247 1202</span></p>
+              <p className="text-muted-foreground">🏦 Bank Transfer: <span className="font-semibold text-secondary">Upon request — details in your invoice</span></p>
+            </div>
           </div>
         </section>
       </>
