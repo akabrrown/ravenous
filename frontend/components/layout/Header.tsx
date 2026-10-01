@@ -146,8 +146,8 @@ export function Header() {
                 {/* Sub-footer contact info */}
                 <div className="bg-charcoal p-6 border-t border-white/5">
                   <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-2">Get in Touch</p>
-                  <p className="text-sm text-gray-300">hello@ravenousstudio.com</p>
-                  <p className="text-sm text-gray-300 mt-1">+233 XX XXX XXXX</p>
+                  <p className="text-sm text-gray-300">ravenousstudioproduction@gmail.com</p>
+                  <p className="text-sm text-gray-300 mt-1">055 247 1202 / 054 050 0729</p>
                 </div>
               </SheetContent>
             </Sheet>

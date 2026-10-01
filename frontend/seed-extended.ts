@@ -80,6 +80,26 @@ const mockServices = [
     isFeatured: false,
     coverMediaUrl: "/images/live_recording.jpg"
   },
+  {
+    name: "Event Photography",
+    slug: "event-photography",
+    shortDescription: "Professional photography for all types of events.",
+    description: "High-quality, crisp, and vibrant event photography. We capture the essence of your event, delivering perfectly edited shots for your personal memories or corporate marketing.",
+    equipmentUsed: ["Sony A7R IV", "Professional Strobe Lighting", "Prime Lenses"],
+    startingPrice: "1500",
+    isFeatured: true,
+    coverMediaUrl: "/images/photography.jpg"
+  },
+  {
+    name: "Event Videography",
+    slug: "event-videography",
+    shortDescription: "Cinematic highlight reels and full event coverage.",
+    description: "Tell the story of your event through cinematic video. We produce dynamic highlight reels, social media teasers, and full-length documentary cuts.",
+    equipmentUsed: ["Sony FX3", "DJI Ronin", "Wireless Audio"],
+    startingPrice: "2500",
+    isFeatured: false,
+    coverMediaUrl: "/images/videography.jpg"
+  },
 ];
 
 const mockPortfolio = [

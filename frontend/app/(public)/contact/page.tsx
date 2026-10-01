@@ -41,7 +41,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Our Studio</h3>
-                    <p className="text-muted-foreground">Accra, Ghana<br/>[Client to provide full address]</p>
+                    <p className="text-muted-foreground">Madina Mayehot<br/>Accra, Ghana</p>
                   </div>
                 </div>
 
@@ -51,7 +51,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Phone & WhatsApp</h3>
-                    <p className="text-muted-foreground">[Client Phone Number]</p>
+                    <p className="text-muted-foreground">055 247 1202 / 054 050 0729</p>
                   </div>
                 </div>
 
@@ -61,7 +61,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Email</h3>
-                    <p className="text-muted-foreground">hello@ravenousstudio.com</p>
+                    <p className="text-muted-foreground">ravenousstudioproduction@gmail.com</p>
                   </div>
                 </div>
 

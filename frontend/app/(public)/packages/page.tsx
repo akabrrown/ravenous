@@ -56,9 +56,8 @@ export default async function PackagesPage() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider">Starting from</span>
-                    <p className="font-heading font-bold text-4xl text-secondary">
-                      GHS {Number(pkg.price).toLocaleString()}
+                    <p className="font-heading font-bold text-2xl text-secondary uppercase">
+                      Contact For Pricing
                     </p>
                   </div>
 

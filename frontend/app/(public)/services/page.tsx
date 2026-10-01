@@ -47,12 +47,9 @@ export default async function ServicesIndexPage() {
                     {service.description}
                   </p>
                   
-                  {service.startingPrice && (
-                    <div className="inline-block bg-off-white border border-border px-4 py-2 rounded-sm mt-2">
-                      <span className="text-sm text-muted-foreground uppercase font-bold tracking-wider">Starting from</span>
-                      <p className="font-heading font-bold text-2xl text-secondary">GHS {Number(service.startingPrice).toLocaleString()}</p>
-                    </div>
-                  )}
+                  <div className="inline-block bg-off-white border border-border px-4 py-2 rounded-sm mt-2">
+                    <p className="font-heading font-bold text-lg text-secondary uppercase">Contact For Pricing</p>
+                  </div>
 
                   <div className="pt-6 flex gap-4">
                     <Link href={`/services/${service.slug}`} className={buttonVariants({ size: "lg" })}>

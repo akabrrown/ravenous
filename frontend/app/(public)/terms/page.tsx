@@ -54,7 +54,7 @@ export default function TermsPage() {
 
           <div className="mt-12 pt-8 border-t border-border">
             <h3 className="font-heading uppercase">Questions?</h3>
-            <p>If you have any questions about these Terms, please contact us at hello@ravenousstudio.com.</p>
+            <p>If you have any questions about these Terms, please contact us at ravenousstudioproduction@gmail.com.</p>
             <Link href="/contact" className={buttonVariants({ variant: "outline", className: "mt-4" })}>
               Contact Us
             </Link>
