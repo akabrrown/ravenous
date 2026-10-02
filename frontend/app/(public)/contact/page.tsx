@@ -82,7 +82,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-secondary uppercase mb-1">Payments</h3>
-                    <p className="text-muted-foreground">Mobile Money: 055 247 1202</p>
+                    <p className="text-muted-foreground">Mobile Money: Upon request</p>
                     <p className="text-muted-foreground">Bank Account: Upon request</p>
                   </div>
                 </div>

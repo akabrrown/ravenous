@@ -29,7 +29,7 @@ export default function TermsPage() {
 
           <h2>1. Booking and Payment</h2>
           <p>
-            A deposit is required to secure your booking date. The remaining balance must be paid in full prior to the event date. Payments can be made via Mobile Money (055 247 1202) or Bank Transfer (details provided upon request). The exact deposit amount and schedule will be confirmed in your booking invoice. Failure to complete payment may result in cancellation of services.
+            A deposit is required to secure your booking date. The remaining balance must be paid in full prior to the event date. Payments can be made via Mobile Money or Bank Transfer (details provided upon request). The exact deposit amount and schedule will be confirmed in your booking invoice. Failure to complete payment may result in cancellation of services.
           </p>
 
           <h2>2. Cancellations</h2>

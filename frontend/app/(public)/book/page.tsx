@@ -32,7 +32,7 @@ export default function BookPage() {
             </p>
             <div className="mt-6 bg-off-white border border-border rounded-sm p-4 text-sm text-left space-y-1">
               <p className="font-bold text-secondary uppercase tracking-wide text-xs mb-2">Payment Methods</p>
-              <p className="text-muted-foreground">📱 Mobile Money: <span className="font-semibold text-secondary">055 247 1202</span></p>
+              <p className="text-muted-foreground">📱 Mobile Money: <span className="font-semibold text-secondary">Upon request — details in your invoice</span></p>
               <p className="text-muted-foreground">🏦 Bank Transfer: <span className="font-semibold text-secondary">Upon request — details in your invoice</span></p>
             </div>
           </div>
