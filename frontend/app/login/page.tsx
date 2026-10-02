@@ -21,10 +21,14 @@ export default async function LoginPage(props: { searchParams: Promise<{ error?:
         </Link>
       </div>
       <Card className="w-full max-w-md bg-white border-border shadow-sm">
-        <CardHeader className="text-center space-y-2">
-          <CardTitle className="font-heading font-bold text-3xl uppercase tracking-wider text-secondary">
-            Ravenous<span className="text-primary">Studio</span>
-          </CardTitle>
+        <CardHeader className="text-center space-y-4 pb-2">
+          <div className="flex justify-center">
+            <img
+              src="/logo.png"
+              alt="Ravenous Studio Production"
+              className="h-12 w-auto"
+            />
+          </div>
           <CardDescription className="text-muted-foreground uppercase text-xs tracking-widest font-bold">
             Admin Authentication
           </CardDescription>

@@ -8,12 +8,11 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <span className="font-heading font-bold text-2xl tracking-tight text-white">
-                RAVENOUS
-              </span>
-              <span className="font-heading font-bold text-xl tracking-tight text-primary ml-2">
-                STUDIO
-              </span>
+              <img
+                src="/logo.png"
+                alt="Ravenous Studio Production"
+                className="h-10 w-auto invert"
+              />
             </Link>
             <p className="text-gray-300 text-sm mt-2 max-w-xs">
               Premier event production, live streaming, and media coverage across Accra and beyond.

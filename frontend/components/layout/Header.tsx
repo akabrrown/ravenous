@@ -46,13 +46,12 @@ export function Header() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="font-heading font-bold text-2xl tracking-tight text-secondary">
-                RAVENOUS
-              </span>
-              <span className="font-heading font-bold text-xl tracking-tight text-primary hidden sm:inline-block">
-                STUDIO
-              </span>
+            <Link href="/" className="flex items-center">
+              <img
+                src="/logo.png"
+                alt="Ravenous Studio Production"
+                className="h-8 w-auto"
+              />
             </Link>
           </div>
 
@@ -88,13 +87,12 @@ export function Header() {
               >
                 {/* Custom Sheet Header */}
                 <div className="flex h-16 items-center justify-between px-4 border-b border-white/10">
-                  <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
-                    <span className="font-heading font-bold text-2xl tracking-tight text-white">
-                      RAVENOUS
-                    </span>
-                    <span className="font-heading font-bold text-xl tracking-tight text-primary">
-                      STUDIO
-                    </span>
+                  <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+                    <img
+                      src="/logo.png"
+                      alt="Ravenous Studio Production"
+                      className="h-8 w-auto invert"
+                    />
                   </Link>
                   <Button variant="ghost" size="icon" onClick={() => setOpen(false)} className="text-white hover:bg-white/10">
                     <X className="h-6 w-6" />
