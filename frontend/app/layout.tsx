@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: "Ravenous Studio Production",
   description: "Event production and media company offering LED screen rental, live streaming, live recording, and event coverage.",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: [{ url: '/favicon.png', type: 'image/png' }],
+    apple: '/favicon.png',
   },
   openGraph: {
     title: "Ravenous Studio Production",
