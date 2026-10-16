@@ -3,7 +3,8 @@ import assert from 'node:assert';
 import { 
   normalizeWhatsAppPhone, 
   createWhatsAppDeepLink, 
-  formatWhatsAppMessage 
+  formatWhatsAppMessage,
+  formatClientStatusMessage 
 } from './whatsapp-utils.ts';
 
 describe('WhatsApp Utilities', () => {
@@ -95,6 +96,48 @@ describe('WhatsApp Utilities', () => {
       assert.ok(msg.includes('Kofi Boateng'));
       assert.ok(msg.includes('General Question'));
       assert.ok(msg.includes('outdoor events'));
+    });
+  });
+
+  describe('formatClientStatusMessage', () => {
+    test('formats confirmed booking message for client', () => {
+      const msg = formatClientStatusMessage('booking', 'confirmed', {
+        clientName: 'Kwame Asante',
+        eventType: 'Wedding & Reception',
+        eventDate: '2026-11-20',
+        location: 'AICC, Accra',
+      });
+
+      assert.ok(msg.includes('BOOKING CONFIRMED'));
+      assert.ok(msg.includes('Kwame Asante'));
+      assert.ok(msg.includes('Wedding & Reception'));
+      assert.ok(msg.includes('AICC, Accra'));
+      assert.ok(msg.includes('Ravenous Studio Production'));
+    });
+
+    test('formats completed event message with review link', () => {
+      const msg = formatClientStatusMessage('booking', 'completed', {
+        clientName: 'Abena Mansa',
+        eventType: 'Gospel Concert',
+        eventDate: '2026-10-15',
+        location: 'National Theatre, Accra',
+      });
+
+      assert.ok(msg.includes('EVENT COMPLETED'));
+      assert.ok(msg.includes('Abena Mansa'));
+      assert.ok(msg.includes('/review'));
+    });
+
+    test('formats cancelled booking message professionally', () => {
+      const msg = formatClientStatusMessage('booking', 'cancelled', {
+        clientName: 'Kofi Mensah',
+        eventType: 'Corporate Summit',
+        eventDate: '2026-12-01',
+        location: 'Kempinski Hotel',
+      });
+
+      assert.ok(msg.includes('BOOKING CANCELLED') || msg.includes('STATUS UPDATE'));
+      assert.ok(msg.includes('Kofi Mensah'));
     });
   });
 });

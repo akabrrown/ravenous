@@ -128,3 +128,83 @@ export function formatWhatsAppMessage<T extends keyof WhatsAppPayload>(
 
   return "New incoming request on Ravenous Studio.";
 }
+
+export type ClientStatusPayload = {
+  clientName?: string | null;
+  eventType: string;
+  eventDate: string;
+  location?: string | null;
+  total?: string | null;
+  note?: string | null;
+};
+
+/**
+ * Formats a client-facing WhatsApp status notification message.
+ */
+export function formatClientStatusMessage(
+  type: "booking" | "quote",
+  status: string,
+  data: ClientStatusPayload
+): string {
+  const name = data.clientName ? ` ${data.clientName}` : "";
+
+  if (status === "confirmed") {
+    return [
+      `🎉 *BOOKING CONFIRMED — Ravenous Studio Production*`,
+      ``,
+      `Hello${name}!`,
+      `We are pleased to inform you that your booking for *${data.eventType}* has been officially CONFIRMED.`,
+      ``,
+      `📅 *Date:* ${data.eventDate}`,
+      `📍 *Location:* ${data.location || "Confirmed Venue"}`,
+      `📋 *Status:* Confirmed`,
+      ``,
+      `Our technical and production crew is locked in for your date. If you have any schedule updates or equipment adjustments, simply reply directly to this chat!`,
+      ``,
+      `Thank you for choosing Ravenous Studio Production. ✨`,
+    ].join("\n");
+  }
+
+  if (status === "completed") {
+    return [
+      `🌟 *EVENT COMPLETED — Ravenous Studio Production*`,
+      ``,
+      `Hello${name}!`,
+      `It was an absolute pleasure providing production coverage for your *${data.eventType}* on ${data.eventDate}!`,
+      ``,
+      `How was our service? We would deeply appreciate your feedback to help us continually elevate our production standards:`,
+      `👉 https://ravenousstudioproduction.com/review`,
+      ``,
+      `Warm regards,`,
+      `Ravenous Studio Production Team`,
+    ].join("\n");
+  }
+
+  if (status === "cancelled") {
+    return [
+      `📋 *BOOKING CANCELLED — Ravenous Studio Production*`,
+      ``,
+      `Hello${name},`,
+      `Your booking request for *${data.eventType}* on ${data.eventDate} has been updated to *Cancelled*.`,
+      ``,
+      `If this was an error or you wish to reschedule for a future date, please reply to this message and our production manager will be glad to assist you.`,
+      ``,
+      `Ravenous Studio Production`,
+    ].join("\n");
+  }
+
+  // in_progress or other statuses
+  return [
+    `ℹ️ *STATUS UPDATE — Ravenous Studio Production*`,
+    ``,
+    `Hello${name}!`,
+    `The status of your *${data.eventType}* booking has been updated to: *${status.toUpperCase()}*.`,
+    ``,
+    `📅 *Event Date:* ${data.eventDate}`,
+    `📍 *Location:* ${data.location || "Scheduled Location"}`,
+    ``,
+    `If you have any questions, feel free to reply to this message.`,
+    `Ravenous Studio Production`,
+  ].join("\n");
+}
+

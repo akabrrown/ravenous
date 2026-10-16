@@ -10,8 +10,24 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Trash2, MessageSquare, Calendar, FileText, CheckCircle2 } from "lucide-react";
-import { deleteBooking, updateBookingStatus, deleteQuoteRequest } from "@/lib/actions";
+import { 
+  Trash2, 
+  MessageSquare, 
+  Calendar, 
+  FileText, 
+  CheckCircle2, 
+  Mail, 
+  X, 
+  ExternalLink,
+  Send,
+  AlertCircle
+} from "lucide-react";
+import { 
+  deleteBooking, 
+  updateBookingStatus, 
+  deleteQuoteRequest, 
+  updateQuoteRequestStatus 
+} from "@/lib/actions";
 import { createWhatsAppDeepLink } from "@/lib/whatsapp-utils";
 
 type Booking = {
@@ -41,6 +57,18 @@ type QuoteRequest = {
   createdAt: Date;
 };
 
+type NotifyModalData = {
+  isOpen: boolean;
+  title: string;
+  clientName: string | null;
+  clientPhone: string | null;
+  clientEmail: string | null;
+  status: string;
+  whatsappUrl: string | null;
+  whatsappMessage: string;
+  emailStatus: string;
+};
+
 export default function BookingsClient({ 
   initialBookings,
   initialQuotes = [],
@@ -51,6 +79,7 @@ export default function BookingsClient({
   const [activeTab, setActiveTab] = useState<"bookings" | "quotes">("bookings");
   const [bookings, setBookings] = useState(initialBookings);
   const [quotes, setQuotes] = useState(initialQuotes);
+  const [notifyModal, setNotifyModal] = useState<NotifyModalData | null>(null);
 
   const handleDeleteBooking = async (id: string) => {
     if (!confirm("Are you sure you want to delete this booking record?")) return;
@@ -65,8 +94,51 @@ export default function BookingsClient({
   };
 
   const handleStatusChange = async (id: string, newStatus: Booking["status"]) => {
-    await updateBookingStatus(id, newStatus);
-    setBookings(bookings.map(b => b.id === id ? { ...b, status: newStatus } : b));
+    try {
+      const res = await updateBookingStatus(id, newStatus);
+      setBookings(bookings.map(b => b.id === id ? { ...b, status: newStatus } : b));
+
+      if (res.whatsappUrl || res.emailStatus !== "skipped") {
+        setNotifyModal({
+          isOpen: true,
+          title: `Booking Status: ${newStatus.toUpperCase()}`,
+          clientName: res.clientName || null,
+          clientPhone: res.clientPhone || null,
+          clientEmail: res.clientEmail || null,
+          status: newStatus,
+          whatsappUrl: res.whatsappUrl,
+          whatsappMessage: res.whatsappMessage,
+          emailStatus: res.emailStatus,
+        });
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to update booking status.");
+    }
+  };
+
+  const handleQuoteStatusChange = async (id: string, newStatus: any) => {
+    try {
+      const res = await updateQuoteRequestStatus(id, newStatus);
+      setQuotes(quotes.map(q => q.id === id ? { ...q, status: newStatus } : q));
+
+      if (res.whatsappUrl || res.emailStatus !== "skipped") {
+        setNotifyModal({
+          isOpen: true,
+          title: `Quote Status: ${newStatus.toUpperCase()}`,
+          clientName: res.clientName || null,
+          clientPhone: res.clientPhone || null,
+          clientEmail: res.clientEmail || null,
+          status: newStatus,
+          whatsappUrl: res.whatsappUrl,
+          whatsappMessage: res.whatsappMessage,
+          emailStatus: res.emailStatus,
+        });
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert("Failed to update quote request status.");
+    }
   };
 
   const openWhatsAppChat = (phone: string | null | undefined, name: string | null | undefined, type: "booking" | "quote") => {
@@ -93,7 +165,115 @@ export default function BookingsClient({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Client Notification Dispatch Modal */}
+      {notifyModal && notifyModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-xl shadow-2xl border border-gray-200 max-w-lg w-full overflow-hidden">
+            {/* Modal Header */}
+            <div className="bg-slate-900 text-white p-5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center font-bold">
+                  <CheckCircle2 className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-heading font-bold text-lg leading-tight">
+                    Status Updated Successfully
+                  </h3>
+                  <p className="text-xs text-gray-300">
+                    Client Notification Routing (Email & WhatsApp)
+                  </p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setNotifyModal(null)}
+                className="text-gray-400 hover:text-white p-1 rounded-md transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 space-y-5">
+              {/* Email Status Indicator */}
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5 flex items-start gap-3">
+                <div className="p-2 rounded-md bg-blue-100 text-blue-700 mt-0.5">
+                  <Mail className="w-4 h-4" />
+                </div>
+                <div className="text-xs space-y-0.5 flex-1">
+                  <span className="font-bold text-gray-800 block uppercase tracking-wider text-[11px]">
+                    Email Notification
+                  </span>
+                  {notifyModal.emailStatus === "sent" ? (
+                    <p className="text-green-700 font-medium">
+                      ✓ Branded confirmation email sent to <span className="font-mono">{notifyModal.clientEmail}</span>
+                    </p>
+                  ) : notifyModal.emailStatus === "logged" ? (
+                    <p className="text-slate-600">
+                      ✓ Email generated and logged to database for <span className="font-mono">{notifyModal.clientEmail}</span> (Resend API key in testing/simulated mode).
+                    </p>
+                  ) : (
+                    <p className="text-amber-700 font-medium">
+                      No client email was provided for this record.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* WhatsApp Message Preview & 1-Click Action */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
+                    <MessageSquare className="w-3.5 h-3.5 text-green-600" />
+                    WhatsApp Client Update
+                  </span>
+                  {notifyModal.clientPhone && (
+                    <span className="text-xs font-mono font-medium text-gray-500">
+                      To: {notifyModal.clientPhone}
+                    </span>
+                  )}
+                </div>
+
+                <div className="bg-emerald-50/60 border border-emerald-200/80 rounded-lg p-3.5 text-xs text-gray-800 font-sans whitespace-pre-line leading-relaxed max-h-48 overflow-y-auto">
+                  {notifyModal.whatsappMessage}
+                </div>
+
+                <p className="text-[11px] text-gray-500">
+                  Tap below to open WhatsApp Web or your mobile app with this exact message pre-composed.
+                </p>
+              </div>
+
+              {/* Modal Actions */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                {notifyModal.whatsappUrl ? (
+                  <a
+                    href={notifyModal.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:flex-1 inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white font-bold text-xs uppercase tracking-wide px-4 py-3 rounded-lg shadow-sm transition-colors text-center"
+                  >
+                    <Send className="w-4 h-4" />
+                    Send via WhatsApp
+                  </a>
+                ) : (
+                  <div className="w-full text-xs text-center text-amber-600 font-medium py-2">
+                    No client phone number available for WhatsApp
+                  </div>
+                )}
+
+                <Button
+                  variant="outline"
+                  onClick={() => setNotifyModal(null)}
+                  className="w-full sm:w-auto text-xs font-semibold px-4 py-3"
+                >
+                  Done / Close
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Navigation tabs between Bookings and Quotes */}
       <div className="flex items-center gap-3 border-b border-gray-200 pb-3">
         <button
@@ -173,7 +353,7 @@ export default function BookingsClient({
                     </TableCell>
                     <TableCell>
                       {Number(booking.total) > 0 ? (
-                        <span className="font-semibold text-gray-900">GH₵{Number(booking.total).toLocaleString()}</span>
+                        <span className="font-semibold text-gray-900">GH₵${Number(booking.total).toLocaleString()}</span>
                       ) : (
                         <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Contact for Pricing</span>
                       )}
@@ -182,7 +362,7 @@ export default function BookingsClient({
                       <select
                         value={booking.status}
                         onChange={(e) => handleStatusChange(booking.id, e.target.value as Booking["status"])}
-                        className={`text-xs font-semibold rounded-full px-2.5 py-1 border outline-none ${statusColors[booking.status]}`}
+                        className={`text-xs font-semibold rounded-full px-2.5 py-1 border outline-none cursor-pointer ${statusColors[booking.status]}`}
                       >
                         <option value="pending">Pending</option>
                         <option value="confirmed">Confirmed</option>
@@ -216,7 +396,7 @@ export default function BookingsClient({
                 <TableHead>Client & Contact</TableHead>
                 <TableHead>Event & Date</TableHead>
                 <TableHead>Location & Attendance</TableHead>
-                <TableHead>Requirements</TableHead>
+                <TableHead>Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -260,9 +440,15 @@ export default function BookingsClient({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="text-xs text-gray-600 max-w-xs line-clamp-2" title={quote.requirements || ""}>
-                        {quote.requirements || "None specified"}
-                      </p>
+                      <select
+                        value={quote.status}
+                        onChange={(e) => handleQuoteStatusChange(quote.id, e.target.value)}
+                        className="text-xs font-semibold rounded-full px-2.5 py-1 border bg-slate-50 text-slate-800 border-slate-200 outline-none cursor-pointer"
+                      >
+                        <option value="new">New</option>
+                        <option value="quoted">Quoted</option>
+                        <option value="closed">Closed</option>
+                      </select>
                     </TableCell>
                     <TableCell className="text-right">
                       <Button 

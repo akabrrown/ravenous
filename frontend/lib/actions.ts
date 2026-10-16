@@ -18,7 +18,9 @@ import {
   quoteRequests,
   notifications
 } from "./schema";
-import { sendAdminWhatsAppNotification } from "./whatsapp";
+import { sendAdminWhatsAppNotification, getAdminWhatsAppConfig } from "./whatsapp";
+import { formatClientStatusMessage, createWhatsAppDeepLink } from "./whatsapp-utils";
+import { sendTransactionalEmail, generateStatusUpdateEmailHtml } from "./email";
 import { eq, desc, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
@@ -279,10 +281,162 @@ export async function deletePortfolio(id: string) {
 // ADMIN MUTATIONS (BOOKINGS)
 // ----------------------------------------------------------------------------
 
-export async function updateBookingStatus(id: string, status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled") {
-  await db.update(bookings).set({ status }).where(eq(bookings.id, id));
+export async function updateBookingStatus(
+  id: string, 
+  status: "pending" | "confirmed" | "in_progress" | "completed" | "cancelled"
+) {
+  const booking = await db.query.bookings.findFirst({
+    where: eq(bookings.id, id),
+  });
+
+  if (!booking) {
+    throw new Error("Booking not found");
+  }
+
+  const statusHistory = Array.isArray(booking.statusHistory) 
+    ? [...booking.statusHistory, { status, timestamp: new Date().toISOString() }] 
+    : [{ status, timestamp: new Date().toISOString() }];
+
+  await db.update(bookings).set({ 
+    status, 
+    statusHistory 
+  }).where(eq(bookings.id, id));
+
+  const whatsappMessage = formatClientStatusMessage("booking", status, {
+    clientName: booking.guestName,
+    eventType: booking.eventType,
+    eventDate: booking.eventDate,
+    location: booking.location,
+    total: booking.total,
+  });
+
+  const whatsappUrl = booking.guestPhone 
+    ? createWhatsAppDeepLink(booking.guestPhone, whatsappMessage) 
+    : null;
+
+  let emailStatus = "skipped";
+  if (booking.guestEmail) {
+    const emailSubject = `Booking ${status === "confirmed" ? "Confirmed" : "Status Update"}: ${booking.eventType} - Ravenous Studio Production`;
+    const emailHtml = generateStatusUpdateEmailHtml({
+      clientName: booking.guestName || "Valued Client",
+      eventType: booking.eventType,
+      eventDate: booking.eventDate,
+      location: booking.location,
+      status,
+      total: booking.total,
+    });
+
+    const emailRes = await sendTransactionalEmail({
+      to: booking.guestEmail,
+      subject: emailSubject,
+      html: emailHtml,
+    });
+    emailStatus = emailRes.status;
+
+    try {
+      await db.insert(notifications).values({
+        type: "client_email_status_update",
+        recipient: booking.guestEmail,
+        payload: {
+          bookingId: id,
+          status,
+          emailStatus,
+          subject: emailSubject,
+        },
+        status: emailStatus === "sent" ? "sent" : "logged",
+        sentAt: emailStatus === "sent" ? new Date() : null,
+      });
+    } catch (e) {
+      console.warn("Failed to log status email notification:", e);
+    }
+  }
+
+  const config = await getAdminWhatsAppConfig();
+  if (config.webhookUrl && booking.guestPhone) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      await fetch(config.webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipient: booking.guestPhone,
+          message: whatsappMessage,
+          type: "client_status_update",
+          bookingId: id,
+          status,
+          timestamp: new Date().toISOString(),
+        }),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+    } catch (e) {
+      console.warn("Client status WhatsApp webhook error (non-fatal):", e);
+    }
+  }
+
   revalidatePath("/admin/bookings");
-  return { success: true };
+  return { 
+    success: true,
+    bookingId: id,
+    status,
+    clientName: booking.guestName,
+    clientPhone: booking.guestPhone,
+    clientEmail: booking.guestEmail,
+    whatsappUrl,
+    whatsappMessage,
+    emailStatus,
+  };
+}
+
+export async function updateQuoteRequestStatus(
+  id: string,
+  status: "new" | "quoted" | "closed"
+) {
+  const quote = await db.query.quoteRequests.findFirst({
+    where: eq(quoteRequests.id, id),
+  });
+
+  if (!quote) {
+    throw new Error("Quote request not found");
+  }
+
+  await db.update(quoteRequests).set({ status }).where(eq(quoteRequests.id, id));
+
+  const whatsappMessage = `Hello ${quote.guestName || "Valued Client"}! This is Ravenous Studio Production regarding your quote request for ${quote.eventType} on ${quote.eventDate}. Your request status has been updated to: *${status.replace("_", " ").toUpperCase()}*. We would love to discuss your production plan and pricing. Reply here anytime!`;
+  
+  const whatsappUrl = quote.guestPhone 
+    ? createWhatsAppDeepLink(quote.guestPhone, whatsappMessage) 
+    : null;
+
+  let emailStatus = "skipped";
+  if (quote.guestEmail) {
+    const emailRes = await sendTransactionalEmail({
+      to: quote.guestEmail,
+      subject: `Quote Request Update: ${quote.eventType} - Ravenous Studio Production`,
+      html: generateStatusUpdateEmailHtml({
+        clientName: quote.guestName || "Valued Client",
+        eventType: quote.eventType,
+        eventDate: quote.eventDate,
+        location: quote.location,
+        status,
+      }),
+    });
+    emailStatus = emailRes.status;
+  }
+
+  revalidatePath("/admin/bookings");
+  return {
+    success: true,
+    quoteId: id,
+    status,
+    clientName: quote.guestName,
+    clientPhone: quote.guestPhone,
+    clientEmail: quote.guestEmail,
+    whatsappUrl,
+    whatsappMessage,
+    emailStatus,
+  };
 }
 
 export async function deleteBooking(id: string) {
