@@ -68,8 +68,9 @@ export async function getAllServices() {
 }
 
 export async function getServiceBySlug(slug: string) {
+  const normalizedSlug = slug === "led-screen-rental" ? "led-screen-rentals" : slug;
   return db.query.services.findFirst({
-    where: and(eq(services.published, true), eq(services.slug, slug)),
+    where: and(eq(services.published, true), eq(services.slug, normalizedSlug)),
     with: {
       coverMedia: true,
       category: true,
@@ -703,6 +704,7 @@ export async function submitBookingRequest(data: {
   name: string;
   phone: string;
   email: string;
+  eventType?: string;
   serviceId?: string;
   serviceName?: string;
   date: string;
@@ -713,14 +715,20 @@ export async function submitBookingRequest(data: {
     throw new Error("Missing required fields for booking request.");
   }
 
+  const determinedEventType = data.eventType?.trim() || data.serviceName || "Event Production";
+  const formattedRequirements = [
+    data.serviceName ? `Selected Service: ${data.serviceName}` : null,
+    data.notes?.trim() ? `Client Notes: ${data.notes.trim()}` : null,
+  ].filter(Boolean).join("\n\n") || "No additional notes provided.";
+
   const [booking] = await db.insert(bookings).values({
     guestName: data.name.trim(),
     guestEmail: data.email.trim(),
     guestPhone: data.phone.trim(),
-    eventType: data.serviceName || "Event Production",
+    eventType: determinedEventType,
     eventDate: data.date,
     location: data.location.trim(),
-    requirements: data.notes?.trim() || "No additional notes provided.",
+    requirements: formattedRequirements,
     status: "pending",
     total: "0.00",
     statusHistory: [{ status: "pending", timestamp: new Date().toISOString() }],
@@ -730,10 +738,10 @@ export async function submitBookingRequest(data: {
     guestName: data.name.trim(),
     guestPhone: data.phone.trim(),
     guestEmail: data.email.trim(),
-    eventType: data.serviceName || "Event Production",
+    eventType: data.serviceName ? `${determinedEventType} (${data.serviceName})` : determinedEventType,
     eventDate: data.date,
     location: data.location.trim(),
-    requirements: data.notes?.trim() || null,
+    requirements: data.notes?.trim() || (data.serviceName ? `Service: ${data.serviceName}` : null),
   });
 
   revalidatePath("/admin/bookings");

@@ -84,7 +84,7 @@ export default async function Home() {
         <div className="flex animate-[marquee_20s_linear_infinite] whitespace-nowrap py-4">
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex shrink-0 items-center gap-8 px-8">
-              {["LED SCREEN RENTAL", "LIVE STREAMING", "4K RECORDING", "WEDDING COVERAGE", "FUNERAL COVERAGE", "CORPORATE EVENTS", "GOSPEL CONCERTS"].map((label) => (
+              {["LED SCREEN RENTALS", "MULTI-CAMERA LIVE STREAMING", "4K LIVE RECORDING", "CINEMATIC VIDEOGRAPHY", "PROFESSIONAL PHOTOGRAPHY", "AUDIO & STAGE RIGGING"].map((label) => (
                 <span key={label} className="text-xs font-bold uppercase tracking-[0.15em] text-gray-500 flex items-center gap-8">
                   {label} <span className="w-1.5 h-1.5 rounded-full bg-primary/60"></span>
                 </span>

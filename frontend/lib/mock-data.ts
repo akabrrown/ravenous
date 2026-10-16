@@ -1,10 +1,21 @@
+export const EVENT_TYPES = [
+  "Wedding",
+  "Funeral",
+  "Gospel Concert",
+  "Corporate Event",
+  "Outdoor Festival",
+  "Other"
+] as const;
+
+export type EventType = typeof EVENT_TYPES[number];
+
 export const services = [
   {
     id: "s1",
-    name: "LED Screen Rental",
-    slug: "led-screen-rental",
+    name: "LED Screen Rentals",
+    slug: "led-screen-rentals",
     short_description: "High-resolution LED screens for indoor and outdoor events.",
-    description: "Our high-resolution LED screens provide crystal-clear visuals for any event size. From corporate presentations to massive outdoor concerts, we deliver reliable, bright, and scalable screen solutions.",
+    description: "Our high-resolution modular LED screens provide crystal-clear visuals for any event size. From corporate presentations and weddings to massive outdoor concerts, we deliver reliable, bright, and scalable screen solutions.",
     equipment_used: ["P3.91mm Outdoor LED Panels", "Novastar Video Processors", "Trussing Support Systems"],
     starting_price: 3500,
     is_featured: true,
@@ -23,58 +34,36 @@ export const services = [
   },
   {
     id: "s3",
-    name: "Funeral Coverage",
-    slug: "funeral-coverage",
-    short_description: "Respectful and comprehensive funeral media coverage.",
-    description: "Respectful, unobtrusive coverage of funeral services, including live streaming for family members abroad and printed memorial materials.",
-    equipment_used: ["Sony PXW-Z190 Cameras", "Portable PA Systems"],
-    starting_price: 3000,
-    is_featured: false,
-    cover_media: "/images/funeral_coverage.jpg"
+    name: "Live Recording",
+    slug: "live-recording",
+    short_description: "Multi-track audio and 4K video recording for post-production.",
+    description: "Capture every moment in stunning 4K and pristine multi-track audio. Perfect for theater performances, gospel concerts, and corporate keynotes that require high-end post-production.",
+    equipment_used: ["Canon C300 Mk III", "Zoom F8n Pro Recorders", "Sennheiser Wireless Mics"],
+    starting_price: 2000,
+    is_featured: true,
+    cover_media: "/images/live_recording.jpg"
   },
   {
     id: "s4",
-    name: "Outdoor Events",
-    slug: "outdoor-events",
-    short_description: "Complete media and production solutions for outdoor events.",
-    description: "From elegant outdoor dinners to massive festivals, we provide comprehensive staging, lighting, and coverage for any open-air occasion.",
-    equipment_used: ["Weatherproof Cameras", "Outdoor PA Systems", "Generators"],
-    starting_price: 4000,
+    name: "Event Videography",
+    slug: "event-videography",
+    short_description: "Cinematic 4K videography, drone coverage, and highlight films.",
+    description: "Beautiful, cinematic capture of your special day. We provide comprehensive coverage from preparation to reception, delivering high-end 4K recap films, drone aerials, and multi-angle recordings you will cherish forever.",
+    equipment_used: ["Sony A7S III", "DJI Ronin Gimbals", "DJI Mavic 3 Drones"],
+    starting_price: 3500,
     is_featured: true,
     cover_media: "/images/outdoor.jpg"
   },
   {
     id: "s5",
-    name: "Wedding Coverage",
-    slug: "wedding-coverage",
-    short_description: "Cinematic wedding videography and photography.",
-    description: "Beautiful, cinematic capture of your special day. We provide comprehensive coverage from preparation to the reception, delivering high-end photos and a highlight film you'll cherish forever.",
-    equipment_used: ["Sony A7S III", "DJI Ronin Gimbals", "DJI Mavic 3 Drones"],
-    starting_price: 4500,
+    name: "Event Photography",
+    slug: "event-photography",
+    short_description: "High-resolution event photography and edited digital galleries.",
+    description: "Professional still photography capturing intimate candids, stage moments, and key personalities across your entire event with crisp, color-graded delivery.",
+    equipment_used: ["Sony A7 IV", "GMaster Prime Lenses", "Profoto Strobes & Modifiers"],
+    starting_price: 2000,
     is_featured: true,
     cover_media: "/images/wedding.jpg"
-  },
-  {
-    id: "s6",
-    name: "Gospel Events",
-    slug: "gospel-events",
-    short_description: "Dynamic production for gospel concerts and church services.",
-    description: "We specialize in capturing the energy and spirit of gospel events with multi-camera setups, crisp audio recording, and dynamic stage lighting.",
-    equipment_used: ["PTZ Cameras", "DMX Lighting Controllers", "Digital Audio Snakes"],
-    starting_price: 3500,
-    is_featured: false,
-    cover_media: "/images/gospel_coverage.jpg"
-  },
-  {
-    id: "s7",
-    name: "Live Recording",
-    slug: "live-recording",
-    short_description: "Multi-track audio and 4K video recording for post-production.",
-    description: "Capture every moment in stunning 4K and pristine multi-track audio. Perfect for theater performances and corporate keynotes that require high-end post-production.",
-    equipment_used: ["Canon C300 Mk III", "Zoom F8n Pro Recorders", "Sennheiser Wireless Mics"],
-    starting_price: 2000,
-    is_featured: false,
-    cover_media: "/images/live_recording.jpg"
   },
 ];
 

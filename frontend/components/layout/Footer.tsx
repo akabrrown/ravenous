@@ -40,11 +40,11 @@ export function Footer() {
           <div>
             <h3 className="font-heading font-bold text-lg mb-4 text-white">Services</h3>
             <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link href="/services/led-screen-rental" className="hover:text-primary transition-colors">LED Screen Rental</Link></li>
+              <li><Link href="/services/led-screen-rentals" className="hover:text-primary transition-colors">LED Screen Rentals</Link></li>
               <li><Link href="/services/live-streaming" className="hover:text-primary transition-colors">Live Streaming</Link></li>
               <li><Link href="/services/live-recording" className="hover:text-primary transition-colors">Live Recording</Link></li>
-              <li><Link href="/services/wedding-coverage" className="hover:text-primary transition-colors">Wedding Coverage</Link></li>
-              <li><Link href="/services/funeral-coverage" className="hover:text-primary transition-colors">Funeral Coverage</Link></li>
+              <li><Link href="/services/event-videography" className="hover:text-primary transition-colors">Event Videography</Link></li>
+              <li><Link href="/services/event-photography" className="hover:text-primary transition-colors">Event Photography</Link></li>
             </ul>
           </div>
 

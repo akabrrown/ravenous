@@ -7,11 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { services } from "@/lib/mock-data";
+import { services, EVENT_TYPES } from "@/lib/mock-data";
 import { CheckCircle2, MessageSquare, Loader2, AlertCircle } from "lucide-react";
 import { submitQuoteRequest } from "@/lib/actions";
-
-const eventTypes = ["Wedding", "Funeral", "Gospel Concert", "Corporate Event", "Outdoor Festival", "Other"];
 
 export default function QuotePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -219,7 +217,7 @@ export default function QuotePage() {
                         className="flex h-9 w-full rounded-sm border border-input bg-off-white px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
                         <option value="">Select event type</option>
-                        {eventTypes.map((t) => (
+                        {EVENT_TYPES.map((t) => (
                           <option key={t} value={t}>{t}</option>
                         ))}
                       </select>

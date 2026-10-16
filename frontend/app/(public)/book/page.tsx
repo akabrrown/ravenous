@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { services } from "@/lib/mock-data";
+import { services, EVENT_TYPES } from "@/lib/mock-data";
 import { CheckCircle2, MessageSquare, Loader2, AlertCircle } from "lucide-react";
 import { submitBookingRequest } from "@/lib/actions";
 
@@ -21,6 +21,7 @@ export default function BookPage() {
     name: "",
     phone: "",
     email: "",
+    eventType: "",
     serviceId: "",
     date: "",
     location: "",
@@ -39,6 +40,7 @@ export default function BookPage() {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
+        eventType: formData.eventType,
         serviceId: formData.serviceId,
         serviceName: selectedService ? selectedService.name : "Event Production",
         date: formData.date,
@@ -192,21 +194,38 @@ export default function BookPage() {
                 </fieldset>
 
                 <fieldset className="space-y-4">
-                  <legend className="font-heading font-bold text-xl uppercase text-secondary mb-2">Event & Service</legend>
-                  <div className="space-y-2">
-                    <Label htmlFor="b-service">Service *</Label>
-                    <select
-                      id="b-service"
-                      required
-                      value={formData.serviceId}
-                      onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
-                      className="flex h-9 w-full rounded-sm border border-input bg-off-white px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                    >
-                      <option value="">Select a service</option>
-                      {services.map((s) => (
-                        <option key={s.id} value={s.id}>{s.name}</option>
-                      ))}
-                    </select>
+                  <legend className="font-heading font-bold text-xl uppercase text-secondary mb-2">Event & Technical Service</legend>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="b-event-type">Event Type *</Label>
+                      <select
+                        id="b-event-type"
+                        required
+                        value={formData.eventType}
+                        onChange={(e) => setFormData({ ...formData, eventType: e.target.value })}
+                        className="flex h-9 w-full rounded-sm border border-input bg-off-white px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      >
+                        <option value="">Select event type</option>
+                        {EVENT_TYPES.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="b-service">Primary Service Needed *</Label>
+                      <select
+                        id="b-service"
+                        required
+                        value={formData.serviceId}
+                        onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
+                        className="flex h-9 w-full rounded-sm border border-input bg-off-white px-3 py-1 text-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                      >
+                        <option value="">Select a service</option>
+                        {services.map((s) => (
+                          <option key={s.id} value={s.id}>{s.name}</option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
