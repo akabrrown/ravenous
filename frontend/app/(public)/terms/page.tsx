@@ -15,7 +15,7 @@ export default function TermsPage() {
             <h1 className="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tight mb-4">
               Terms & <span className="text-primary">Conditions</span>
             </h1>
-            <p className="text-gray-300">Last updated: [DATE_PLACEHOLDER]</p>
+            <p className="text-gray-300">Last updated: October 2026</p>
           </div>
         </div>
       </section>
@@ -23,8 +23,7 @@ export default function TermsPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl prose prose-slate dark:prose-invert">
           <p>
-            Please read these terms and conditions carefully before using our services.
-            <em> Note: This is a placeholder document until the final legal copy is provided by the client.</em>
+            Please read these terms and conditions carefully before engaging Ravenous Studio Production for your event production, live streaming, equipment rental, or media coverage services.
           </p>
 
           <h2>1. Booking and Payment</h2>

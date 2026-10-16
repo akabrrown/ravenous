@@ -15,7 +15,7 @@ export default function PrivacyPage() {
             <h1 className="font-heading font-bold text-4xl md:text-5xl uppercase tracking-tight mb-4">
               Privacy <span className="text-primary">Policy</span>
             </h1>
-            <p className="text-gray-300">Last updated: [DATE_PLACEHOLDER]</p>
+            <p className="text-gray-300">Last updated: October 2026</p>
           </div>
         </div>
       </section>
@@ -23,8 +23,7 @@ export default function PrivacyPage() {
       <section className="py-20 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl prose prose-slate dark:prose-invert">
           <p>
-            Ravenous Studio Production is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
-            <em> Note: This is a placeholder document until the final legal copy is provided by the client.</em>
+            Ravenous Studio Production is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our production and media services.
           </p>
 
           <h2>1. Information We Collect</h2>
