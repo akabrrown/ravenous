@@ -770,11 +770,23 @@ export async function submitQuoteRequest(data: {
 
   const attendance = data.expectedAttendance ? parseInt(String(data.expectedAttendance), 10) : null;
 
+  const MOCK_ID_MAP: Record<string, string> = {
+    "s1": "ce722374-3b15-4667-911e-b470df56f299", // LED Screen Rentals
+    "s2": "10dcffdc-468b-4ca5-872c-6af4439eafcf", // Live Streaming
+    "s3": "1d0bf1d3-fa41-4fa1-9705-58f813599901", // Live Recording
+    "s4": "babe3f04-21f8-40e3-b59e-41641f6546d1", // Event Videography
+    "s5": "19a0af7f-b721-4632-8bb9-27a4d13ea4a8", // Event Photography
+  };
+  const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const sanitizedServiceIds = (data.serviceIds || [])
+    .map((id) => MOCK_ID_MAP[id] || id)
+    .filter((id) => UUID_REGEX.test(id));
+
   const [quote] = await db.insert(quoteRequests).values({
     guestName: data.name.trim(),
     guestEmail: data.email.trim(),
     guestPhone: data.phone.trim(),
-    serviceIds: data.serviceIds && data.serviceIds.length > 0 ? data.serviceIds : [],
+    serviceIds: sanitizedServiceIds,
     eventType: data.eventType.trim(),
     eventDate: data.eventDate,
     location: data.location.trim(),

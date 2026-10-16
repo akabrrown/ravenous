@@ -11,7 +11,7 @@ export type EventType = typeof EVENT_TYPES[number];
 
 export const services = [
   {
-    id: "s1",
+    id: "ce722374-3b15-4667-911e-b470df56f299",
     name: "LED Screen Rentals",
     slug: "led-screen-rentals",
     short_description: "High-resolution LED screens for indoor and outdoor events.",
@@ -22,7 +22,7 @@ export const services = [
     cover_media: "/images/led_screen.jpg"
   },
   {
-    id: "s2",
+    id: "10dcffdc-468b-4ca5-872c-6af4439eafcf",
     name: "Live Streaming",
     slug: "live-streaming",
     short_description: "Professional multi-camera live streaming to any platform.",
@@ -33,7 +33,7 @@ export const services = [
     cover_media: "/images/live_stream.jpg"
   },
   {
-    id: "s3",
+    id: "1d0bf1d3-fa41-4fa1-9705-58f813599901",
     name: "Live Recording",
     slug: "live-recording",
     short_description: "Multi-track audio and 4K video recording for post-production.",
@@ -44,7 +44,7 @@ export const services = [
     cover_media: "/images/live_recording.jpg"
   },
   {
-    id: "s4",
+    id: "babe3f04-21f8-40e3-b59e-41641f6546d1",
     name: "Event Videography",
     slug: "event-videography",
     short_description: "Cinematic 4K videography, drone coverage, and highlight films.",
@@ -55,7 +55,7 @@ export const services = [
     cover_media: "/images/outdoor.jpg"
   },
   {
-    id: "s5",
+    id: "19a0af7f-b721-4632-8bb9-27a4d13ea4a8",
     name: "Event Photography",
     slug: "event-photography",
     short_description: "High-resolution event photography and edited digital galleries.",
