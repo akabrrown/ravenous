@@ -14,8 +14,10 @@ export default async function Home() {
   const featuredPortfolio = await getFeaturedPortfolio();
   const testimonials = await getTestimonials();
   const siteContentList = await db.query.siteContent.findMany();
-  
-  const contentMap = siteContentList.reduce((acc, curr) => ({ ...acc, [curr.key]: curr.value }), {} as Record<string, any>);
+  const contentMap = siteContentList.reduce<Record<string, string>>((acc, curr) => {
+    acc[curr.key] = typeof curr.value === "string" ? curr.value : JSON.stringify(curr.value);
+    return acc;
+  }, {});
 
   return (
     <>
@@ -32,7 +34,7 @@ export default async function Home() {
 
             <h1 className="font-heading font-bold tracking-tighter leading-[1.05] mb-6">
               <span className="block text-4xl md:text-5xl lg:text-6xl text-white">
-                {(contentMap["hero_title"] || "LED SCREENS & LIVE STREAMS").split('&').map((part: string, i: number, arr: any[]) => (
+                {(contentMap["hero_title"] || "LED SCREENS & LIVE STREAMS").split('&').map((part: string, i: number, arr: string[]) => (
                   <span key={i}>
                     {part.trim()}
                     {i < arr.length - 1 && <span className="text-primary"> & </span>}
@@ -140,7 +142,7 @@ export default async function Home() {
                 Production Without <span className="text-primary">Compromise</span>
               </h2>
               <p className="text-gray-300 text-lg mb-8 leading-relaxed">
-                We don't just supply equipment; we supply peace of mind. Our team of experienced engineers and operators ensure your event runs smoothly from the first cable plugged in to the final applause.
+                We don&apos;t just supply equipment; we supply peace of mind. Our team of experienced engineers and operators ensure your event runs smoothly from the first cable plugged in to the final applause.
               </p>
               
               <div className="space-y-4">
@@ -230,7 +232,7 @@ export default async function Home() {
                       </svg>
                     ))}
                   </div>
-                  <p className="text-lg text-foreground italic mb-6">"{t.quoteText}"</p>
+                  <p className="text-lg text-foreground italic mb-6">&quot;{t.quoteText}&quot;</p>
                   <p className="font-bold text-secondary">{t.customerName}</p>
                 </CardContent>
               </Card>
@@ -252,7 +254,7 @@ export default async function Home() {
           <h2 className="font-heading font-bold text-3xl md:text-5xl uppercase mb-6">Ready to Capture Your Next Event?</h2>
           <p className="text-xl mb-10 max-w-2xl mx-auto text-white/90">Get in touch today to discuss your requirements and get a custom quote.</p>
           <Link href="/book" className={cn(buttonVariants({ variant: "secondary", size: "lg" }), "h-14 px-8 text-lg font-bold bg-white text-primary hover:bg-gray-100")}>
-            Let's Talk About Your Event
+            Let&apos;s Talk About Your Event
           </Link>
         </div>
       </section>

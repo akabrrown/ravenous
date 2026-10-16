@@ -14,8 +14,11 @@ import {
   settings,
   packages,
   siteContent,
-  serviceCategories
+  serviceCategories,
+  quoteRequests,
+  notifications
 } from "./schema";
+import { sendAdminWhatsAppNotification } from "./whatsapp";
 import { eq, desc, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@supabase/supabase-js";
@@ -167,6 +170,18 @@ export async function getAdminBookings() {
   return db.query.bookings.findMany({
     orderBy: [desc(bookings.createdAt)],
   });
+}
+
+export async function getAdminQuoteRequests() {
+  return db.query.quoteRequests.findMany({
+    orderBy: [desc(quoteRequests.createdAt)],
+  });
+}
+
+export async function deleteQuoteRequest(id: string) {
+  await db.delete(quoteRequests).where(eq(quoteRequests.id, id));
+  revalidatePath("/admin/bookings");
+  return { success: true };
 }
 
 export async function getAdminTestimonials() {
@@ -525,3 +540,172 @@ export async function deleteFaq(id: string) {
   revalidatePath("/about");
   return { success: true };
 }
+
+// ----------------------------------------------------------------------------
+// PUBLIC SUBMISSION MUTATIONS (BOOKINGS, QUOTES, CONTACT WITH WHATSAPP NOTIFICATIONS)
+// ----------------------------------------------------------------------------
+
+export async function submitBookingRequest(data: {
+  name: string;
+  phone: string;
+  email: string;
+  serviceId?: string;
+  serviceName?: string;
+  date: string;
+  location: string;
+  notes?: string;
+}) {
+  if (!data.name || !data.phone || !data.email || !data.date || !data.location) {
+    throw new Error("Missing required fields for booking request.");
+  }
+
+  const [booking] = await db.insert(bookings).values({
+    guestName: data.name.trim(),
+    guestEmail: data.email.trim(),
+    guestPhone: data.phone.trim(),
+    eventType: data.serviceName || "Event Production",
+    eventDate: data.date,
+    location: data.location.trim(),
+    requirements: data.notes?.trim() || "No additional notes provided.",
+    status: "pending",
+    total: "0.00",
+    statusHistory: [{ status: "pending", timestamp: new Date().toISOString() }],
+  }).returning();
+
+  const notif = await sendAdminWhatsAppNotification("booking", {
+    guestName: data.name.trim(),
+    guestPhone: data.phone.trim(),
+    guestEmail: data.email.trim(),
+    eventType: data.serviceName || "Event Production",
+    eventDate: data.date,
+    location: data.location.trim(),
+    requirements: data.notes?.trim() || null,
+  });
+
+  revalidatePath("/admin/bookings");
+  return {
+    success: true,
+    bookingId: booking.id,
+    whatsappUrl: notif.whatsappUrl,
+  };
+}
+
+export async function submitQuoteRequest(data: {
+  name: string;
+  phone: string;
+  email: string;
+  eventType: string;
+  eventDate: string;
+  location: string;
+  serviceIds?: string[];
+  serviceNames?: string[];
+  expectedAttendance?: string | number;
+  requirements?: string;
+}) {
+  if (!data.name || !data.phone || !data.email || !data.eventType || !data.eventDate || !data.location) {
+    throw new Error("Missing required fields for quote request.");
+  }
+
+  const attendance = data.expectedAttendance ? parseInt(String(data.expectedAttendance), 10) : null;
+
+  const [quote] = await db.insert(quoteRequests).values({
+    guestName: data.name.trim(),
+    guestEmail: data.email.trim(),
+    guestPhone: data.phone.trim(),
+    serviceIds: data.serviceIds && data.serviceIds.length > 0 ? data.serviceIds : [],
+    eventType: data.eventType.trim(),
+    eventDate: data.eventDate,
+    location: data.location.trim(),
+    expectedAttendance: isNaN(Number(attendance)) ? null : attendance,
+    requirements: data.requirements?.trim() || "No additional requirements provided.",
+    status: "new",
+  }).returning();
+
+  const notif = await sendAdminWhatsAppNotification("quote", {
+    guestName: data.name.trim(),
+    guestPhone: data.phone.trim(),
+    guestEmail: data.email.trim(),
+    eventType: data.eventType.trim(),
+    eventDate: data.eventDate,
+    location: data.location.trim(),
+    services: data.serviceNames || [],
+    expectedAttendance: isNaN(Number(attendance)) ? null : attendance,
+    requirements: data.requirements?.trim() || null,
+  });
+
+  revalidatePath("/admin/bookings");
+  return {
+    success: true,
+    quoteRequestId: quote.id,
+    whatsappUrl: notif.whatsappUrl,
+  };
+}
+
+export async function submitContactMessage(data: {
+  name: string;
+  email: string;
+  phone?: string;
+  subject: string;
+  message: string;
+}) {
+  if (!data.name || !data.email || !data.subject || !data.message) {
+    throw new Error("Missing required fields for contact message.");
+  }
+
+  const notif = await sendAdminWhatsAppNotification("contact", {
+    name: data.name.trim(),
+    email: data.email.trim(),
+    phone: data.phone?.trim() || null,
+    subject: data.subject.trim(),
+    message: data.message.trim(),
+  });
+
+  return {
+    success: true,
+    whatsappUrl: notif.whatsappUrl,
+  };
+}
+
+export async function getAdminWhatsAppSetting() {
+  const phoneRow = await db.query.settings.findFirst({
+    where: eq(settings.key, "admin_whatsapp_phone"),
+  });
+  const webhookRow = await db.query.settings.findFirst({
+    where: eq(settings.key, "admin_whatsapp_webhook_url"),
+  });
+
+  return {
+    phone: phoneRow?.value ? String(phoneRow.value) : "0552471202",
+    webhookUrl: webhookRow?.value ? String(webhookRow.value) : "",
+  };
+}
+
+export async function saveAdminWhatsAppSetting(phone: string, webhookUrl?: string) {
+  const cleanPhone = phone.trim();
+  const existingPhone = await db.query.settings.findFirst({
+    where: eq(settings.key, "admin_whatsapp_phone"),
+  });
+
+  if (existingPhone) {
+    await db.update(settings).set({ value: cleanPhone, updatedAt: new Date() }).where(eq(settings.key, "admin_whatsapp_phone"));
+  } else {
+    await db.insert(settings).values({ key: "admin_whatsapp_phone", value: cleanPhone });
+  }
+
+  const cleanWebhook = webhookUrl?.trim() || "";
+  const existingWebhook = await db.query.settings.findFirst({
+    where: eq(settings.key, "admin_whatsapp_webhook_url"),
+  });
+
+  if (existingWebhook) {
+    await db.update(settings).set({ value: cleanWebhook, updatedAt: new Date() }).where(eq(settings.key, "admin_whatsapp_webhook_url"));
+  } else if (cleanWebhook) {
+    await db.insert(settings).values({ key: "admin_whatsapp_webhook_url", value: cleanWebhook });
+  }
+
+  revalidatePath("/admin/settings");
+  revalidatePath("/admin/bookings");
+  revalidatePath("/");
+  return { success: true };
+}
+

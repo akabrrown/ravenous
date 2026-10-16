@@ -1,10 +1,13 @@
-import { getAdminBookings } from "@/lib/actions";
+import { getAdminBookings, getAdminQuoteRequests } from "@/lib/actions";
 import BookingsClient from "./BookingsClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminBookingsPage() {
-  const bookings = await getAdminBookings();
+  const [bookings, quoteRequests] = await Promise.all([
+    getAdminBookings(),
+    getAdminQuoteRequests(),
+  ]);
 
   return (
     <div className="p-8">
@@ -15,7 +18,7 @@ export default async function AdminBookingsPage() {
         </div>
       </div>
 
-      <BookingsClient initialBookings={bookings} />
+      <BookingsClient initialBookings={bookings} initialQuotes={quoteRequests} />
     </div>
   );
 }

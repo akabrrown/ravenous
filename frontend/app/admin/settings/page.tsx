@@ -1,21 +1,27 @@
-import { getAdminSettings } from "@/lib/actions";
+import { getAdminSettings, getAdminWhatsAppSetting } from "@/lib/actions";
 import SettingsClient from "./SettingsClient";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
-  const settings = await getAdminSettings();
+  const [settings, whatsappConfig] = await Promise.all([
+    getAdminSettings(),
+    getAdminWhatsAppSetting(),
+  ]);
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 font-heading">Settings</h1>
-          <p className="text-gray-500 mt-2">Manage global platform settings and configurations.</p>
+          <h1 className="text-3xl font-bold text-gray-900 font-heading">Settings & Notifications</h1>
+          <p className="text-gray-500 mt-2">Manage platform configurations and WhatsApp notification routing.</p>
         </div>
       </div>
 
-      <SettingsClient initialSettings={settings} />
+      <SettingsClient 
+        initialSettings={settings} 
+        initialWhatsAppConfig={whatsappConfig} 
+      />
     </div>
   );
 }

@@ -1,9 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import ContactForm from "./ContactForm";
 
 export const metadata = {
   title: "Contact Us | Ravenous Studio Production",
@@ -90,39 +86,7 @@ export default function ContactPage() {
             </div>
 
             {/* Contact Form */}
-            <Card className="border-border/50 shadow-lg rounded-sm overflow-hidden">
-              <div className="h-2 bg-primary w-full"></div>
-              <CardContent className="p-8">
-                <h2 className="font-heading font-bold text-2xl uppercase text-secondary mb-6">Send us a message</h2>
-                <form className="space-y-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Full Name</Label>
-                    <Input id="name" placeholder="John Doe" className="bg-off-white" />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address</Label>
-                      <Input id="email" type="email" placeholder="john@example.com" className="bg-off-white" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input id="phone" type="tel" placeholder="+233 XX XXX XXXX" className="bg-off-white" />
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject</Label>
-                    <Input id="subject" placeholder="General Inquiry" className="bg-off-white" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea id="message" placeholder="How can we help you?" className="min-h-[120px] bg-off-white" />
-                  </div>
-                  <Button type="submit" size="lg" className="w-full uppercase font-bold tracking-wide">
-                    Send Message
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            <ContactForm />
 
           </div>
         </div>

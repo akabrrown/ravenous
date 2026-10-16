@@ -23,7 +23,7 @@ export default async function ServicesIndexPage() {
               Our <span className="text-primary">Services</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-300">
-              Professional production solutions tailored to your event's specific needs and scale.
+              Professional production solutions tailored to your event&apos;s specific needs and scale.
             </p>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default async function ServicesIndexPage() {
       {/* CTA BAND */}
       <section className="py-20 bg-off-white border-t border-border/50 text-center">
         <div className="container mx-auto px-4">
-          <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-4">Don't see exactly what you need?</h2>
+          <h2 className="font-heading font-bold text-3xl uppercase text-secondary mb-4">Don&apos;t see exactly what you need?</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">We offer custom packages for unique events. Contact us to discuss your specific requirements.</p>
           <Link href="/contact" className={cn(buttonVariants({ size: "lg" }), "px-8")}>
             Contact Us for a Custom Quote
